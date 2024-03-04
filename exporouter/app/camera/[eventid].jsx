@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Button } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import url from '../../config';
 
@@ -10,14 +10,9 @@ const CameraPage = ({ route }) => {
   const [isCameraActive, setCameraActive] = useState(true);
   const device = useCameraDevice('back');
   const [eventid, setEventId] = useState("");
+  const local = useLocalSearchParams();
 
-  useEffect(() => {
-    if (route && route.params && route.params.eventid) {
-      console.log(route.params.eventid)
-      setEventId(route.params.eventid);
-    }
-  }, [route]);
-
+ 
   const handleAttendance = async () => {
     if (eventid !== "") {
       try {
@@ -51,8 +46,8 @@ const CameraPage = ({ route }) => {
         codeScanner={codeScanner}
       />
       <View style={styles.text}>
-        <Text>{eventid}</Text>
-        <Button title="Mark Attendance" onPress={handleAttendance} />
+        <Text>{local.eventid}</Text>
+        {/* <Button title="Mark Attendance" onPress={handleAttendance} /> */}
       </View>
     </View>
   );

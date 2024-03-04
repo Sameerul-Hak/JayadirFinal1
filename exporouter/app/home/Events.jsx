@@ -1,23 +1,42 @@
-import { View, Text, Button } from 'react-native'
-import React from 'react'
-import { router } from 'expo-router'
+import { View, Text, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { router } from 'expo-router';
+import axios from 'axios';
+import url from '../../config';
 
 const Events = () => {
-  const handleattendance=()=>{
-    router.push("/camera/Camera");
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${url}/events/allevents`)
+      .then((response) => {
+        setEvents(response.data);
+        console.log(response.data)
+      })
+      .catch(error => console.error('Error fetching events:', error));
+  }, []);
+
+  const handleAttendance = (eventId) => {
+    router.push({
+      pathname: `/camera/${eventId}`,
+      // state: { eventid: eventId },
+    });
   }
+
   return (
     <View>
-        <View>
-            <Text>Events 1</Text>
-            <Button title='Attendance'  onPress={handleattendance}/>
+      {events.map(event => (
+        <View key={event.eventId}>
+          <Text>{event.eventName}</Text>
+          <Text>{event.eventDescription}</Text>
+          <Text>{event.eventLocation}</Text>
+          <Text>{event.eventDay}</Text>
+          <Text>{event.eventTiming}</Text>
+          <Button title='Attendance' onPress={() => handleAttendance(event.eventId)} />
         </View>
-        <View>
-            <Text>Events 2</Text>
-            <Button title='Attendance'  onPress={handleattendance}/>
-        </View>
+      ))}
     </View>
-  )
+  );
 }
 
-export default Events
+export default Events;
