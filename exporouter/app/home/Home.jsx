@@ -3,6 +3,7 @@ import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import eventimage from '../../assets/images/Event.jpeg';
 
 const Home = () => {
+  
   return (
     <ImageBackground source={eventimage} style={styles.backgroundImage}>
       <View style={styles.container}>

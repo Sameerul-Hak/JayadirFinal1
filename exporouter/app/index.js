@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { router } from 'expo-router';
 import axios from 'axios';
 import url from '../config';
+import { Context } from '../Context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Index = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
+  const { user,setuser } = useContext(Context);
 
   const handleLogin = async () => {
     // Validate phone number and password
@@ -24,7 +27,9 @@ const Index = () => {
 
       // Assuming your backend returns a success message
       if (response.status == 200) {
-        // Navigate to the home screen upon successful login
+        setuser({userid:response.data.userId,username:response.data.name,useremail:"",userphonenumber:response.data.phoneNumber});
+
+        console.log(response.data.userId,response.data.name,response.data.phoneNumber);
         router.push('/home');
       } else {
         // Handle invalid credentials
@@ -38,7 +43,7 @@ const Index = () => {
   };
 
   return (
-    <View>
+    <SafeAreaView>
       <Text>Index</Text>
       <TextInput
         placeholder="Phone Number"
@@ -52,7 +57,7 @@ const Index = () => {
       />
       <Button title="Login" onPress={handleLogin} />
       <Text onPress={() => router.push('/Register')}>Register</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
