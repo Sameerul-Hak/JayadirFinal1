@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { router } from 'expo-router';
 import axios from 'axios';
 import url from '../../config';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -24,7 +25,7 @@ const Events = () => {
   }
 
   return (
-    <View>
+    <SafeAreaView>
       {events.map(event => (
         <View key={event.eventId}>
           <Text>{event.eventName}</Text>
@@ -35,7 +36,7 @@ const Events = () => {
           <Button title='Attendance' onPress={() => handleAttendance(event.eventId)} />
         </View>
       ))}
-    </View>
+    </SafeAreaView>
   );
 }
 

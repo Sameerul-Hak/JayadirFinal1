@@ -1,75 +1,69 @@
-const db = require("../app");
+const  Attendance  = require('../Model/AttendanceModel');
 
-exports.allattendance=(req, res) => {
-    const query = "SELECT * FROM attendance";
-    
-    db.query(query, (err, result) => {
-      if (err) {
-        console.error(`Error fetching attendance records: ${err}`);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        res.status(200).json(result);
-      }
-    });
-  };
+exports.allAttendance = async (req, res) => {
+  try {
+    const attendanceRecords = await Attendance.findAll();
+    res.status(200).json(attendanceRecords);
+  } catch (error) {
+    console.error(`Error fetching attendance records: ${error}`);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
-  exports.createAttendance=(req, res) => {
-    const attendanceData = req.body;
-    const query = "INSERT INTO attendance SET ?";
-    
-    db.query(query, attendanceData, (err, result) => {
-      if (err) {
-        console.error(`Error creating attendance record: ${err}`);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        res.status(201).json({ message: "Attendance record created successfully", attendanceId: result.insertId });
-      }
-    });
-  };
 
-  exports.checkattendance=(req, res) => {
-    const eventId = req.params.eventId;
-    const userId = req.params.userId;
-    const query = "SELECT * FROM attendance WHERE eventId = ? AND userId = ?";
-    
-    db.query(query, [eventId, userId], (err, result) => {
-      if (err) {
-        console.error(`Error checking attendance: ${err}`);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        if (result.length > 0) {
-          res.status(200).json({ isAttendanceMarked: true });
-        } else {
-          res.status(200).json({ isAttendanceMarked: false });
-        }
-      }
-    });
-  };
-  exports.updateattendance=(req, res) => {
-    const attendanceId = req.params.attendanceId;
-    const updatedData = req.body;
-    const query = "UPDATE attendance SET ? WHERE attendanceId = ?";
-    
-    db.query(query, [updatedData, attendanceId], (err, result) => {
-      if (err) {
-        console.error(`Error updating attendance record: ${err}`);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        res.status(200).json({ message: "Attendance record updated successfully" });
-      }
-    });
-  };
+exports.createAttendance = async (req, res) => {
+  const { eventId, userId } = req.body;
 
-  exports.deleteAttendance=(req, res) => {
-    const attendanceId = req.params.attendanceId;
-    const query = "DELETE FROM attendance WHERE attendanceId = ?";
-    
-    db.query(query, attendanceId, (err, result) => {
-      if (err) {
-        console.error(`Error deleting attendance record: ${err}`);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        res.status(200).json({ message: "Attendance record deleted successfully" });
-      }
+  const existingAttendance = await Attendance.findOne({
+    where: { eventId, userId },
+  });
+
+  if (existingAttendance) {
+    return res.status(200).json({ message: "Attendance already marked" });
+  }
+
+  try {
+    const createdAttendance = await Attendance.create({ eventId, userId });
+    res.status(201).json({ message: "Attendance record created successfully", attendanceId: createdAttendance.attendanceId });
+  } catch (error) {
+    console.error(`Error creating attendance record: ${error}`);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+exports.updateAttendance = async (req, res) => {
+  const attendanceId = req.params.attendanceId;
+  const updatedData = req.body;
+
+  try {
+    await Attendance.update(updatedData, {
+      where: {
+        attendanceId: attendanceId,
+      },
     });
-  };
+
+    res.status(200).json({ message: "Attendance record updated successfully" });
+  } catch (error) {
+    console.error(`Error updating attendance record: ${error}`);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+exports.deleteAttendance = async (req, res) => {
+  const attendanceId = req.params.attendanceId;
+
+  try {
+    await Attendance.destroy({
+      where: {
+        attendanceId: attendanceId,
+      },
+    });
+
+    res.status(200).json({ message: "Attendance record deleted successfully" });
+  } catch (error) {
+    console.error(`Error deleting attendance record: ${error}`);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

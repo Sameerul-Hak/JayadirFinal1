@@ -1,14 +1,11 @@
-const express=require("express");
-const { route } = require("./user");
-const { allattendance, createAttendance, checkattendance, updateattendance, deleteAttendance } = require("../Controller/AttendanceController");
-const router=express.Router();
+const express = require('express');
+const router = express.Router();
+const attendanceController = require('../Controller/AttendanceController'); // Adjust the path based on your project structure
+const { route } = require('./user');
 
-router.get("/allattendance",allattendance)
-router.post("/postattendance",createAttendance)
-router.get("/checkAttendance/:eventId/:userId",checkattendance)
-router.delete("/attendance/:attendanceId",deleteAttendance)
-
-
-
-
-module.exports=router;
+// Define your routes using the attendanceController functions
+router.get('/allattendance', attendanceController.allAttendance);
+router.post('/createattendance', attendanceController.createAttendance);
+router.put('/updateattendance/:attendanceId', attendanceController.updateAttendance);
+router.delete('/deleteattendance/:attendanceId', attendanceController.deleteAttendance);
+module.exports = router;
