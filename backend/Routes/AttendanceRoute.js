@@ -8,4 +8,5 @@ router.get('/allattendance', attendanceController.allAttendance);
 router.post('/createattendance', attendanceController.createAttendance);
 router.put('/updateattendance/:attendanceId', attendanceController.updateAttendance);
 router.delete('/deleteattendance/:attendanceId', attendanceController.deleteAttendance);
+router.get("/attendance/event/:eventId", attendanceController.attendanceForEvent); 
 module.exports = router;
