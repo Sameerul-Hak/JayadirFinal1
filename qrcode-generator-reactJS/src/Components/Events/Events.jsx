@@ -12,7 +12,7 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/events/allevent');
+      const response = await axios.get('http://localhost:5000/events/allevents');
       setEvents(response.data);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -37,7 +37,9 @@ const Events = () => {
               <strong className='detail_label'>Day:</strong> {event.eventDay}<br />
               <strong className='detail_label'>Location:</strong> {event.eventLocation}
             </p>
-            <button className='generate_qr_btn'>Generate QR Code</button>
+            <Link to={`/qrcode/${event.eventId}`}>
+              <button className='generate_qr_btn'>Generate QR Code</button>
+            </Link>
           </div>
         ))}
       </div>

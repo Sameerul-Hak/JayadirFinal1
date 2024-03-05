@@ -13,7 +13,7 @@ function App() {
       <Route path='/' element={<Login/>}/>
       <Route path='/events' element={<Events/>}/>
       <Route path='/createevent' element={<CreateEvent/>}/>
-      <Route path='/qrcode' element={<Main/>}/>
+      <Route path='/qrcode/:eventId' element={<Main />} />
     </Routes>
     </Router>
 

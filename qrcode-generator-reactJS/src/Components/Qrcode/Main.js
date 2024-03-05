@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom"; // Import useParams
 import {
   Card,
   CardHeader,
@@ -15,10 +16,16 @@ import QRCode from "qrcode";
 import { createRoot } from "react-dom";
 
 function Main() {
+  const { eventId } = useParams(); // Get the eventId from URL params
   const [title, setTitle] = useState("QR Code Generator");
   const [urlInput, setUrlInput] = useState("");
   const [isGenerated, setIsGenerated] = useState(false);
   const [input, setInput] = useState(true);
+
+  useEffect(() => {
+    // Use the eventId as the initial URL input
+    setUrlInput(eventId ? `${eventId}` : "");
+  }, [eventId]);
 
   function getQrCode() {
     setTitle("Scan Here");
