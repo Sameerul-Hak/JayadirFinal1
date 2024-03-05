@@ -6,16 +6,42 @@ import axios from 'axios';
 import url from '../../config';
 import { Context } from '../../Context';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CameraPage = ({ route }) => {
-    const { user,setuser } = useContext(Context);
-
+  const { user, setuser } = useContext(Context);
 
   const [scannedCodes, setScannedCodes] = useState([]);
   const [isCameraActive, setCameraActive] = useState(true);
   const device = useCameraDevice('back');
   const [ScannedEventId, setEventId] = useState("");
   const { eventid } = useLocalSearchParams();
+
+  const [hasPermission, setHasPermission] = useState(false);
+  const [isActive, setIsActive] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      const status = await Camera.requestCameraPermission();
+      setHasPermission(status === 'granted');
+      setIsActive(true);
+    })();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (storedUserId) {
+          setuser({ userid: storedUserId });
+        }
+      } catch (error) {
+        console.error('Error fetching user ID from AsyncStorage:', error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   useEffect(() => {
     if (eventid !== "") {
@@ -28,24 +54,24 @@ const CameraPage = ({ route }) => {
       Alert.alert('Error', 'Please scan a valid code.');
       return;
     }
-  
+
     if (ScannedEventId !== eventid) {
       Alert.alert('Error', 'You have chosen the wrong event.');
       return;
     }
-  
+
     try {
-      const userId = user.userid
-  
+      const userId = user.userid;
+
       // Sending a POST request to create attendance
       const response = await axios.post(`${url}/attendance/createattendance`, {
         eventId: ScannedEventId, // Assuming ScannedEventId contains the eventId
         userId: userId,
       });
-  
+
       if (response.status === 201) {
-        alert("Attendance marked successfully");
-        router.push("/home");
+        alert('Attendance marked successfully');
+        router.push('/home');
       } else {
         console.error('Failed to mark attendance:', response.data.message);
         Alert.alert('Error', 'Failed to mark attendance. Please try again.');
@@ -55,7 +81,7 @@ const CameraPage = ({ route }) => {
       Alert.alert('Error', 'Failed to mark attendance. Please try again.');
     }
   };
-  
+
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
     onCodeScanned: (codes) => {
@@ -84,20 +110,14 @@ const CameraPage = ({ route }) => {
       <Text>{user.name}</Text>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  cont: {
-    // flex: 1,
-  },
-  camera: {
-    // flex: 0.1,
-    // height:100,
-  },
+  cont: {},
+  camera: {},
   text: {
-    // flex: 0.4,
-    alignSelf: "center",
-  }
+    alignSelf: 'center',
+  },
 });
 
 export default CameraPage;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView, StyleSheet, Modal } from 'react-native';
+import { View, Text, TextInput, Button, ScrollView, StyleSheet, Modal, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
@@ -99,6 +99,44 @@ const Register = () => {
 
     
     const submitData = async () => {
+      if (
+        !fullName ||
+        !icNumber ||
+        !dateOfBirth ||
+        !schoolName ||
+        !date ||
+        !Class ||
+        !Race ||
+        !Fathername ||
+        !fatherage ||
+        !fatheroccupation ||
+        !fatherstatus ||
+        !mothername ||
+        !motherage ||
+        !motheroccupation ||
+        !motherstatus ||
+        !homeaddress ||
+        !state ||
+        !district ||
+        !phonenumber ||
+        !phonenumberfather ||
+        !phonenumbermother ||
+        !whoami ||
+        !selectedSchoolState ||
+        !selectedSchoolDistrict ||
+        !password
+      ) {
+        Alert.alert('Error', 'All fields are mandatory');
+        return;
+      }
+  
+      // Validate IC number format using regular expression
+      const icNumberRegex = /^\d{6}-\d{2}-\d{4}$/;
+      if (!icNumber.match(icNumberRegex)) {
+        Alert.alert('Error', 'Invalid IC number format. Use: 650423-07-5659');
+        return;
+      }
+  
       try {
         const response = await axios.post(`${url}/user/register`, {
           fullName,
@@ -235,7 +273,7 @@ const pickFromGalleryWithPermissions = async () => {
         />
         <Text>IC Number</Text>
       <TextInput
-        placeholder="IC Number"
+        placeholder="650423-07-5659"
         value={icNumber}
         onChangeText={(text) => setIcNumber(text)}
         keyboardType="numeric"
