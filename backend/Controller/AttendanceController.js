@@ -1,4 +1,5 @@
-const  Attendance  = require('../Model/AttendanceModel');
+const Attendance = require('../Model/AttendanceModel');
+const User = require('../Model/UserModel'); // Import User model
 
 exports.allAttendance = async (req, res) => {
   try {
@@ -9,7 +10,6 @@ exports.allAttendance = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 exports.createAttendance = async (req, res) => {
   const { eventId, userId } = req.body;
@@ -28,6 +28,7 @@ exports.createAttendance = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 
 exports.updateAttendance = async (req, res) => {
@@ -64,6 +65,36 @@ exports.deleteAttendance = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+exports.attendanceForEvent = async (req, res) => {
+  const eventId = req.params.eventId;
+
+  try {
+    const attendanceRecords = await Attendance.findAll({
+      where: { eventId: eventId },
+      include: [{ model: User, attributes: ['fullName', 'schoolName', 'state', 'district', 'phonenumber'] }],
+      attributes: ['attendanceId'],
+      raw: true,
+      nest: true
+    });
+
+    const modifiedAttendanceRecords = attendanceRecords.map(record => ({
+      attendanceId: record.attendanceId,
+      user: {
+        fullName: record.User.fullName, // Access user details directly from record
+        schoolName: record.User.schoolName,
+        state: record.User.state,
+        district: record.User.district,
+        phonenumber: record.User.phonenumber
+      }
+    }));
+    res.status(200).json(modifiedAttendanceRecords);
+  } catch (error) {
+    console.error(`Error fetching attendance records for event ${eventId}: ${error}`);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 
 exports.findMyAttendance = async (req, res) => {
   try {

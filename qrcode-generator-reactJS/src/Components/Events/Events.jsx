@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import './Events.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import './Events.css';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -37,9 +37,14 @@ const Events = () => {
               <strong className='detail_label'>Day:</strong> {event.eventDay}<br />
               <strong className='detail_label'>Location:</strong> {event.eventLocation}
             </p>
-            <Link to={`/qrcode/${event.eventId}`}>
-              <button className='generate_qr_btn'>Generate QR Code</button>
-            </Link>
+            <div className="button-group">
+              <Link to={`/qrcode/${event.eventId}`}>
+                <button className='generate_qr_btn'>Generate QR Code</button>
+              </Link>
+              <Link to={`/attendance/${event.eventId}`}>
+                <button className='attendance_btn'>Get Attendance</button>
+              </Link>
+            </div>
           </div>
         ))}
       </div>
