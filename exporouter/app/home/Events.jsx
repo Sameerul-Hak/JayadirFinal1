@@ -1,5 +1,5 @@
-import { View, Text, Button, TouchableOpacity, Linking } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { View, Text, Button, TouchableOpacity, Linking, StyleSheet, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import axios from 'axios';
 import url from '../../config';
@@ -52,21 +52,77 @@ const Events = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
+            <Text style={{alignSelf:"center",fontSize:30,fontWeight:'bold',marginBottom:10}}>Events</Text>
+
+      <ScrollView>
       {events.map((event) => (
-        <View key={event.eventId}>
-          <Text>{event.eventName}</Text>
-          <Text>{event.eventDescription}</Text>
-          <Text>{event.eventLocation}</Text>
+        <View key={event.eventId} style={styles.eventContainer}>
+          <Text style={styles.eventName}>{event.eventName}</Text>
+          <Text style={styles.eventDescription}>{event.eventDescription}</Text>
+          <Text style={styles.eventLocation}>{event.eventLocation}</Text>
           <Text>{event.eventDay}</Text>
           <Text>{event.eventTiming}</Text>
-          <Button title={myAttendanceEvents.includes(event.eventId)?"getCertificate":"Not available"} onPress={() => handleCertificate(event.eventId)} />
-          <Button title="Attendance" onPress={() => handleAttendance(event.eventId)} />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleCertificate(event.eventId)}
+            disabled={!myAttendanceEvents.includes(event.eventId)}
+          >
+            <Text style={styles.buttonText}>Get Certificate</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleAttendance(event.eventId)}
+          >
+            <Text style={styles.buttonText}>Attendance</Text>
+          </TouchableOpacity>
         </View>
       ))}
-      <View></View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  eventContainer: {
+    marginBottom: 20,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+  },
+  eventName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  eventDescription: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 10,
+  },
+  eventLocation: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#3498db',
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
 
 export default Events;

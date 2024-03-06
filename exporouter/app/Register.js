@@ -257,7 +257,7 @@ const pickFromGalleryWithPermissions = async () => {
           })
      }
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       <Text>Register</Text>
       <Text>Full Name:</Text>
       <TextInput
@@ -527,6 +527,11 @@ modalButtonView:{
     padding:10
 },btn:{
     backgroundColor:"blue"
+},
+container: {
+  flex: 1,
+  padding: 20,
+  backgroundColor: '#fff', // Set your desired background color
 },
  });
 export default Register;

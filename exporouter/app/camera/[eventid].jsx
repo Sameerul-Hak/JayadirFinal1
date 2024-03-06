@@ -19,7 +19,7 @@ const CameraPage = ({ route }) => {
 
   const [hasPermission, setHasPermission] = useState(false);
   const [isActive, setIsActive] = useState(true);
-
+  const[visible,setvisble]=useState(true)
   useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
@@ -71,6 +71,7 @@ const CameraPage = ({ route }) => {
 
       if (response.status === 201) {
         alert('Attendance marked successfully');
+        setvisble(!visible)
         router.push('/home');
       } else {
         console.error('Failed to mark attendance:', response.data.message);
@@ -95,12 +96,15 @@ const CameraPage = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.cont}>
-      <Camera
+      {
+        visible && 
+        <Camera
         style={styles.camera}
         device={device}
         isActive={isCameraActive}
         codeScanner={codeScanner}
       />
+      }
       <View style={styles.text}>
         <Text>{ScannedEventId}</Text>
         <Button title="Mark Attendance" onPress={handleAttendance} />
@@ -113,8 +117,10 @@ const CameraPage = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  cont: {},
-  camera: {},
+  cont: {flex:1},
+  camera: {
+    flex:0.6
+  },
   text: {
     alignSelf: 'center',
   },

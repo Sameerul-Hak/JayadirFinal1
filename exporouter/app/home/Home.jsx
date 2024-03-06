@@ -1,15 +1,18 @@
 import React from 'react';
 import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import eventimage from '../../assets/images/Event.jpeg';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Home = () => {
   
   return (
-    <ImageBackground source={eventimage} style={styles.backgroundImage}>
+    <SafeAreaView style={{flex:1}}>
+      <ImageBackground source={eventimage} style={styles.backgroundImage}>
       <View style={styles.container}>
         {/* <Text style={styles.text}>Home</Text> */}
       </View>
     </ImageBackground>
+    </SafeAreaView>
   );
 };
 

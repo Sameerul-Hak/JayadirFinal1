@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import axios from 'axios';
 import url from '../config';
 import { Context } from '../Context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Index = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +22,7 @@ const Index = () => {
     };
 
     checkLoggedIn();
-  }, []); // Empty dependency array ensures this effect runs only once on component mount
+  }, []);
 
   const handleLogin = async () => {
     // Validate phone number and password
@@ -45,7 +46,7 @@ const Index = () => {
         setuser({
           userid: response.data.userId,
           username: response.data.name,
-          useremail: "",
+          useremail: '',
           userphonenumber: response.data.phoneNumber,
         });
 
@@ -63,22 +64,67 @@ const Index = () => {
   };
 
   return (
-    <SafeAreaView>
-      <Text>Index</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Login</Text>
       <TextInput
+        style={styles.input}
         placeholder="Phone Number"
         keyboardType="phone-pad"
         onChangeText={(text) => setPhoneNumber(text)}
       />
       <TextInput
+        style={styles.input}
         placeholder="Password"
         secureTextEntry
         onChangeText={(text) => setPassword(text)}
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Text onPress={() => router.push('/Register')}>Register</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <Text style={styles.registerLink} onPress={() => router.push('/Register')}>
+        Register
+      </Text>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    width: '100%',
+    marginBottom: 20,
+    paddingLeft: 10,
+  },
+  loginButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  registerLink: {
+    marginTop: 10,
+    color: '#3498db',
+    textDecorationLine: 'underline',
+  },
+});
 
 export default Index;
