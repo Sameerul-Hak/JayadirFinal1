@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { router } from 'expo-router';
 import axios from 'axios';
 import url from '../config';
 import { Context } from '../Context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import popupimage from "../assets/images/Event.jpeg"
 const Index = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
+  const [visible, setvisible] = useState(true);
   const { user, setuser } = useContext(Context);
 
   useEffect(() => {
@@ -65,6 +66,13 @@ const Index = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {
+        visible &&
+        <View style={{flex:1,position:"absolute",width:"100%",height:"90%",alignSelf:"center",justifyContent:"center"}}>
+            <Text style={{fontSize:30,backgroundColor:"red",width:"10%",textAlign:"center",borderRadius:10,alignSelf:"flex-end",margin:"1%"}} onPress={()=>setvisible(false)}>X</Text>
+            <Image source={popupimage} style={{width:"100%",height:"90%",zIndex:9,alignSelf:"center"}}/>
+        </View>
+      }
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}

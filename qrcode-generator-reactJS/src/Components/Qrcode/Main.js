@@ -16,7 +16,7 @@ import QRCode from "qrcode";
 import { createRoot } from "react-dom";
 
 function Main() {
-  const { eventId } = useParams(); // Get the eventId from URL params
+  const { eventname,who } = useParams(); // Get the eventId from URL params
   const [title, setTitle] = useState("QR Code Generator");
   const [urlInput, setUrlInput] = useState("");
   const [isGenerated, setIsGenerated] = useState(false);
@@ -24,8 +24,14 @@ function Main() {
 
   useEffect(() => {
     // Use the eventId as the initial URL input
-    setUrlInput(eventId ? `${eventId}` : "");
-  }, [eventId]);
+    let convertedname=eventname.split(" ");
+    let eventnameConverted="";
+    for(let i=0;i<convertedname.length;i++)
+    { 
+      eventnameConverted+=convertedname[i];
+    }
+    setUrlInput(`http://localhost:3000/${eventnameConverted}/${who.substring(1)}`);
+  }, [eventname]);
 
   function getQrCode() {
     setTitle("Scan Here");

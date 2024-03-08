@@ -17,6 +17,8 @@ const Events = () => {
     const fetchEventsAndAttendance = async () => {
       try {
         const userId = await AsyncStorage.getItem('userId');
+        const usernameof = await AsyncStorage.getItem('username');
+        setuser({userId:userId,username:usernameof})
 
         const eventsResponse = await axios.get(`${url}/events/allevents`);
         setEvents(eventsResponse.data);
@@ -43,10 +45,9 @@ const Events = () => {
 
     if (isEventInAttendance) {
       const username = await AsyncStorage.getItem('username');
-      Linking.openURL(`http://localhost:3000/createcertificate/${username}`);
+      Linking.openURL(`https://65e81aacd1619cd70b61ff60--celebrated-liger-c03aa5.netlify.app/?name=${username}`);
       console.log(username);
     } else {
-      // Handle case where the event is not in attendance
       console.log("You can't get a certificate for an event you haven't attended.");
     }
   };

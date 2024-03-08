@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import './Attendance.css';
+import url from '../../Config';
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState([]);
@@ -13,7 +14,7 @@ const Attendance = () => {
 
   const fetchAttendance = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/attendance/attendance/event/${eventId}`);
+      const response = await axios.get(`${url}/attendance/attendance/event/${eventId}`);
       setAttendance(response.data);
     } catch (error) {
       console.error('Error fetching attendance:', error);

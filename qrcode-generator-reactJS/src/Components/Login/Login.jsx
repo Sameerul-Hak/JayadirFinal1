@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link and useNavigate from react-router-dom for navigation
 import axios from 'axios';
 import './Login.css'; // Import CSS file for styling
+import url from '../../Config';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -11,7 +12,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/admin/login', { username, password });
+      await axios.post(`${url}/admin/login`, { username, password });
       alert('Login successful!');
       // Redirect to desired page upon successful login
       navigate('/events'); // Navigate to the Events page

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { View, Text, Button, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Button, Alert, StyleSheet, TouchableOpacity, Image, Linking } from 'react-native';
 import { router } from 'expo-router';
 import { Context } from '../../Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,6 +32,7 @@ const All = () => {
 
   const handleJoin = () => {
     // Handle join action
+    Linking.openURL(`https://t.me/+qtWoq3E091EwMmM1`);
   }
 
   const handleEvents = () => {
@@ -40,18 +41,14 @@ const All = () => {
 
   const handleLogout = async () => {
     try {
-      // Remove the user id from AsyncStorage
       await AsyncStorage.removeItem('userId');
-
-      // Clear the user context
       setuser({
         userid: null,
         username: '',
         useremail: '',
         userphonenumber: '',
       });
-
-      router.push("/"); // You may want to navigate to the login screen or home screen
+      router.push("/");
     } catch (error) {
       console.error('Logout error:', error);
       Alert.alert('Error', 'Failed to logout. Please try again.');

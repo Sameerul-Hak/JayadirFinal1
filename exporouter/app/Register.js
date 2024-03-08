@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, ScrollView, StyleSheet, Modal, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
 import url from '../config';
 import axios from 'axios';
+import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Context } from '../Context';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 const Register = () => {
   const [fullName, setFullName] = useState('');
   const [icNumber, setIcNumber] = useState('');
@@ -31,6 +36,7 @@ const Register = () => {
   const [picture, setPicture] = useState('');
   const [whoami, setWhoAmI] = useState('');
   const [selectedState, setSelectedState] = useState('');
+  const { user, setuser } = useContext(Context);
 
   const [selectedSchoolState, setSelectedSchoolState] = useState('');
   const [selectedSchoolDistrict, setSelectedSchoolDistrict] = useState('');
@@ -99,12 +105,39 @@ const Register = () => {
 
     
     const submitData = async () => {
+      console.log({
+        fullName,
+        icNumber,
+        dateOfBirth,
+        schoolName,
+        date,
+        Class,
+        Race,
+        Fathername,
+        fatherage,
+        fatheroccupation,
+        fatherstatus,
+        mothername,
+        motherage,
+        motheroccupation,
+        motherstatus,
+        homeaddress,
+        state,
+        district,
+        phonenumber,
+        phonenumberfather,
+        phonenumbermother,
+        picture,
+        whoami,
+        selectedSchoolState,
+        selectedSchoolDistrict,
+        password,
+      });
       if (
         !fullName ||
         !icNumber ||
         !dateOfBirth ||
         !schoolName ||
-        !date ||
         !Class ||
         !Race ||
         !Fathername ||
@@ -169,6 +202,16 @@ const Register = () => {
   
         if (response.data != null) {
           console.log(response.data);
+          await AsyncStorage.setItem('userId', response.data.userId.toString());
+        await AsyncStorage.setItem('username', response.data.name);
+
+        setuser({
+          userid: response.data.userId,
+          username: response.data.name,
+          useremail: '',
+          userphonenumber: response.data.phoneNumber,
+        });
+          router.push("/home")
 
         }
       } catch (error) {
@@ -257,41 +300,47 @@ const pickFromGalleryWithPermissions = async () => {
           })
      }
   return (
-    <ScrollView style={styles.container}>
-      <Text>Register</Text>
-      <Text>Full Name:</Text>
+    <SafeAreaView style={{flex:1}}>
+      <ScrollView style={styles.container}>
+      <Text style={{alignSelf:"center",fontSize:20,fontWeight:"bold"}}>Register</Text>
+      <Text style={styles.LabelText}>Full Name:</Text>
       <TextInput
         placeholder="Full Name"
         value={fullName}
         onChangeText={(text) => setFullName(text)}
+        style={styles.InputBox}
         />
-      <Text>Password :</Text>
+      <Text style={styles.LabelText}>Password :</Text>
       <TextInput
         placeholder="Full Name"
         value={password}
         onChangeText={(text) => setpassword(text)}
+        style={styles.InputBox}
         />
-        <Text>IC Number</Text>
+        <Text style={styles.LabelText}>IC Number</Text>
       <TextInput
         placeholder="650423-07-5659"
         value={icNumber}
         onChangeText={(text) => setIcNumber(text)}
+        style={styles.InputBox}
         keyboardType="numeric"
         />
-        <Text>Date of Birth:</Text>
+        <Text style={styles.LabelText}>Date of Birth:</Text>
       <TextInput
         placeholder="Date of Birth"
         value={dateOfBirth}
         onChangeText={(text) => setDateOfBirth(text)}
+        style={styles.InputBox}
         keyboardType="numeric" // You might want to use a date picker component
         />
-        <Text>School Name</Text>
+        <Text style={styles.LabelText}>School Name</Text>
       <TextInput
         placeholder="School Name"
         value={schoolName}
         onChangeText={(text) => setSchoolName(text)}
+        style={styles.InputBox}
         />
-        <Text>SchooL State:</Text>
+        <Text style={styles.LabelText}>SchooL State:</Text>
       <Picker
         selectedValue={selectedSchoolState}
         onValueChange={(itemValue) => {
@@ -299,7 +348,7 @@ const pickFromGalleryWithPermissions = async () => {
           setSelectedSchoolDistrict('');
         }}
         >
-        <Picker.Item label="Select School State" value="" />
+        <Picker.Item label="Select School State" value="" style={{color:"black",fontSize:15,backgroundColor:"#f3f2f1"}}/>
         {schoolStates.map((state) => (
           <Picker.Item key={state} label={state} value={state} />
         ))}
@@ -309,112 +358,120 @@ const pickFromGalleryWithPermissions = async () => {
         selectedValue={selectedSchoolDistrict}
         onValueChange={(itemValue) => setSelectedSchoolDistrict(itemValue)}
         >
-          <Picker.Item label="Select School District" value="" />
+          <Picker.Item label="Select School District" value="" style={{color:"black",fontSize:15,backgroundColor:"#f3f2f1"}}/>
           {schoolDistricts.map((district) => (
             <Picker.Item key={district} label={district} value={district} />
             ))}
         </Picker>
       )}
-      <Text>Class :</Text>
+      <Text style={styles.LabelText}>Class :</Text>
       <Picker
         selectedValue={Class}
         onValueChange={(itemValue) => setClass(itemValue)}
         style={{ backgroundColor: 'white', zIndex: 9999, elevation: 1000, }}
         
         >
-        <Picker.Item label="Select Class Type" value=""  style={{color:"black",fontSize:15}} />
+        <Picker.Item label="Select Class Type" value=""  style={{color:"black",fontSize:15,backgroundColor:"#f3f2f1"}}/>
         <Picker.Item label="3" value="3" style={{color:"black",fontSize:15}} />
         <Picker.Item label="4" value="4" style={{color:"black",fontSize:15}} />
         <Picker.Item label="5" value="5" style={{color:"black",fontSize:15}} />
         <Picker.Item label="STPM" value="STPM" style={{color:"black",fontSize:15}} />
         <Picker.Item label="Others" value="Others" style={{color:"black",fontSize:15}} />
       </Picker>
-      <Text>Race :</Text>
+      <Text style={styles.LabelText}>Race :</Text>
       <Picker
         selectedValue={Race}
         onValueChange={(itemValue) => setRace(itemValue)}
         style={{ backgroundColor: 'white', zIndex: 9999, elevation: 1000, }}
       >
-        <Picker.Item label="Select Race Type" value=""  style={{color:"black",fontSize:15}} />
+        <Picker.Item label="Select Race Type" value=""  style={{color:"black",fontSize:15,backgroundColor:"#f3f2f1"}} />
         <Picker.Item label="Malay" value="Malay" style={{color:"black",fontSize:15}} />
         <Picker.Item label="Chinese" value="Chinese" style={{color:"black",fontSize:15}} />
         <Picker.Item label="Indian" value="Indian" style={{color:"black",fontSize:15}} />
         <Picker.Item label="Others" value="Others" style={{color:"black",fontSize:15}} />
       </Picker>
       
-        <Text>Father Name:</Text>
+        <Text style={styles.LabelText}>Father Name:</Text>
       <TextInput
         placeholder="Father's Name"
         value={Fathername}
         onChangeText={(text) => setFatherName(text)}
+        style={styles.InputBox}
       />
-        <Text>Father Age:</Text>
+        <Text style={styles.LabelText}>Father Age:</Text>
       <TextInput
         placeholder="Father's Age"
         value={fatherage}
         onChangeText={(text) => setFatherAge(text)}
+        style={styles.InputBox}
         keyboardType="numeric"
         />
-        <Text>Father Occupation:</Text>
+        <Text style={styles.LabelText}>Father Occupation:</Text>
       <TextInput
         placeholder="Father's Occupation"
         value={fatheroccupation}
         onChangeText={(text) => setFatherOccupation(text)}
+        style={styles.InputBox}
         />
-        <Text>Father Status:</Text>
+        <Text style={styles.LabelText}>Father Status:</Text>
       <Picker
         selectedValue={fatherstatus}
         onValueChange={(itemValue) => setFatherStatus(itemValue)}
         style={{ backgroundColor: 'white', zIndex: 9999, elevation: 1000, }}
         >
-        <Picker.Item label="Select Father Status Working ?" value=""  style={{color:"black",fontSize:15}} />
+        <Picker.Item label="Select Father Status Working ?" value=""  style={{color:"black",fontSize:15,backgroundColor:"#f3f2f1"}} />
         <Picker.Item label="Yes-Working" value="Yes" style={{color:"black",fontSize:15}} />
         <Picker.Item label="Not Working" value="No" style={{color:"black",fontSize:15}} />
         <Picker.Item label="D - PassedAway" value="D" style={{color:"black",fontSize:15}} />
       </Picker>
       
-        <Text>Mother Name:</Text>
+        <Text style={styles.LabelText}>Mother Name:</Text>
       <TextInput
         placeholder="Mother's Name"
         value={mothername}
         onChangeText={(text) => setMotherName(text)}
+        style={styles.InputBox}
         />
-        <Text>Mother Age:</Text>
+        <Text style={styles.LabelText}>Mother Age:</Text>
       <TextInput
         placeholder="Mother's Age"
         value={motherage}
         onChangeText={(text) => setMotherAge(text)}
+        style={styles.InputBox}
         keyboardType="numeric"
         />
-        <Text>Mother Occupation :</Text>
+        <Text style={styles.LabelText}>Mother Occupation :</Text>
       <TextInput
         placeholder="Mother's Occupation"
         value={motheroccupation}
         onChangeText={(text) => setMotherOccupation(text)}
+        style={styles.InputBox}
         />
-        <Text>Mother Status :</Text>
+        <Text style={styles.LabelText}>Mother Status :</Text>
        <Picker
         selectedValue={motherstatus}
         onValueChange={(itemValue) => setMotherStatus(itemValue)}
         style={{ backgroundColor: 'white', zIndex: 9999, elevation: 1000, }}
         >
-        <Picker.Item label="Select Mother Status Working ?" value=""  style={{color:"black",fontSize:15}} />
+        <Picker.Item label="Select Mother Status Working ?" value=""  style={{color:"black",fontSize:15,backgroundColor:"#f3f2f1"}} />
         <Picker.Item label="Yes-Working" value="Yes" style={{color:"black",fontSize:15}} />
         <Picker.Item label="Not Working" value="No" style={{color:"black",fontSize:15}} />
         <Picker.Item label="D - PassedAway" value="D" style={{color:"black",fontSize:15}} />
       </Picker>
-        <Text>Home Address :</Text>
+        <Text style={styles.LabelText}>Home Address :</Text>
       <TextInput
         placeholder="Home Address"
         value={homeaddress}
         onChangeText={(text) => setHomeAddress(text)}
+        style={styles.InputBox}
         />
-        <Text>Your State :</Text>
+        <Text style={styles.LabelText}>Your State :</Text>
       <Picker
         selectedValue={state}
         onValueChange={(itemValue) => setState(itemValue)}
+        style={styles.InputBox}
         >
-        <Picker.Item label="Select State" value="" />
+        <Picker.Item label="Select State" value="" style={{color:"black",fontSize:15,backgroundColor:"#f3f2f1"}}/>
         {states.map((state) => (
           <Picker.Item key={state} label={state} value={state} />
           ))}
@@ -424,58 +481,61 @@ const pickFromGalleryWithPermissions = async () => {
           selectedValue={district}
           onValueChange={(itemValue) => setDistrict(itemValue)}
         >
-          <Picker.Item label="Select District" value="" />
+          <Picker.Item label="Select District" value="" style={{color:"black",fontSize:15,backgroundColor:"#f3f2f1"}}/>
           {districts.map((district) => (
             <Picker.Item key={district} label={district} value={district} />
           ))}
         </Picker>
       )}
-      <Text>Personal Phone Number</Text>
+      <Text style={styles.LabelText}>Personal Phone Number</Text>
       <TextInput
         placeholder="Phone Number"
         value={phonenumber}
         onChangeText={(text) => setPhoneNumber(text)}
+        style={styles.InputBox}
         keyboardType="numeric"
         />
-        <Text>Father's Phone Number</Text>
+        <Text style={styles.LabelText}>Father's Phone Number</Text>
       <TextInput
         placeholder="Father's Phone Number"
         value={phonenumberfather}
         onChangeText={(text) => setPhoneNumberFather(text)}
+        style={styles.InputBox}
         keyboardType="numeric"
         />
-        <Text>Mother's Phone Number</Text>
+        <Text style={styles.LabelText}>Mother's Phone Number</Text>
       <TextInput
         placeholder="Mother's Phone Number"
         value={phonenumbermother}
         onChangeText={(text) => setPhoneNumberMother(text)}
+        style={styles.InputBox}
         keyboardType="numeric"
       />
-      <Text>Select your role</Text>
+      <Text style={styles.LabelText}>Select your role</Text>
        <Picker
         selectedValue={whoami}
         onValueChange={(itemValue) => setWhoAmI(itemValue)}
         style={{ backgroundColor: 'white', zIndex: 9999, elevation: 1000, }}
         >
-        <Picker.Item label="Who are you ?" value=""  style={{color:"black",fontSize:15}} />
+        <Picker.Item label="Who are you ?" value="" style={{color:"black",fontSize:15,backgroundColor:"#f3f2f1"}} />
         <Picker.Item label="Student" value="Student" style={{color:"black",fontSize:15}} />
         <Picker.Item label="Teachers " value="Teachers " style={{color:"black",fontSize:15}} />
         <Picker.Item label="Expo participants" value="ExpoParticipants" style={{color:"black",fontSize:15}} />
       </Picker>
 
-        <Text>Upload the SPM result:</Text>
+        <Text style={styles.LabelText}>Upload the SPM result:</Text>
 
       <Button 
              style={styles.btn}
               title="Upload Image"
               onPress={() => setModal(true)}>
-                    
+              style={{marginBottom:10}}
              </Button>
              
-             <Button 
+             {/* <Button 
               title="Upload"
               onPress={() => submitData()}>   
-             </Button>
+             </Button> */}
              
      
              
@@ -508,9 +568,10 @@ const pickFromGalleryWithPermissions = async () => {
               </View>
              </Modal>
 
-
-      <Button title="Submit" onPress={submitData} />
+<Text onPress={submitData} style={styles.submit}>Submit</Text>
+      {/* <Button title="Submit" onPress={submitData} style={styles.submit}/> */}
     </ScrollView>
+    </SafeAreaView>
   );
 };
  const styles=StyleSheet.create({
@@ -533,5 +594,26 @@ container: {
   padding: 20,
   backgroundColor: '#fff', // Set your desired background color
 },
+InputBox:{
+borderWidth:0,
+padding:10,
+borderRadius:10,
+marginBottom:10,
+backgroundColor:"#f3f2f1",
+},
+LabelText:{
+  fontSize:20,
+  marginBottom:10
+},
+submit:{
+  marginVertical:25,
+  backgroundColor:"#94F67E",
+  borderRadius:10,
+  width:"40%",
+  alignSelf:"center",
+  textAlign:"center",
+  padding:15,
+  // padding:10
+}
  });
 export default Register;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './CreateEvent.css';
 import axios from 'axios';
+import url from '../../Config';
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState('');
@@ -13,21 +14,37 @@ const CreateEvent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/events/createevent', {
+      const response = await axios.post(`${url}/events/createevent`, {
         eventName,
         eventDescription,
         eventTiming,
         eventDay,
         eventLocation
       });
-      console.log(response.data); // Log the response from the server
-      // Clear form fields after successful submission
+      console.log(response.data); 
+
+      let arrayofname=eventName.split(" ");
+      let tablename="";
+      for(let i=0;i<arrayofname.length;i++)
+      {
+        tablename+=arrayofname[i];
+      }
+      console.log(tablename);
+      const tablecreated=await axios.get(`${url}/${tablename}`);
+      if(tablecreated.data!="")
+      {
+        alert("table created successfully");
+      }
+
+
+
       setEventName('');
       setEventDescription('');
       setEventTiming('');
       setEventDay('');
       setEventLocation('');
       setErrorMessage('');
+
     } catch (error) {
       console.error('Error creating event:', error);
       setErrorMessage('Failed to create event. Please try again.');

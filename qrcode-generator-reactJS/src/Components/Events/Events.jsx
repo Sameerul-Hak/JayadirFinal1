@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Events.css';
+import url from '../../Config';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -12,7 +13,7 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/events/allevents');
+      const response = await axios.get(`${url}/events/allevents`);
       setEvents(response.data);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -38,8 +39,14 @@ const Events = () => {
               <strong className='detail_label'>Location:</strong> {event.eventLocation}
             </p>
             <div className="button-group">
-              <Link to={`/qrcode/${event.eventId}`}>
-                <button className='generate_qr_btn'>Generate QR Code</button>
+              <Link to={`/qrcode/${event.eventName}/:Others`} className="Link">
+                <button className='generate_qr_btn'>Generate QR Code Others</button>
+              </Link>
+              <Link to={`/qrcode/${event.eventName}/:Teacher`} className="Link">
+                <button className='generate_qr_btn'>Generate QR Code for Teacher</button>
+              </Link>
+              <Link to={`/qrcode/${event.eventName}/:Student`} className="Link">
+                <button className='generate_qr_btn'>Generate QR Code for Student</button>
               </Link>
               <Link to={`/attendance/${event.eventId}`}>
                 <button className='attendance_btn'>Get Attendance</button>

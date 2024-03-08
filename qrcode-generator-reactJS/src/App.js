@@ -8,6 +8,9 @@ import Main from './Components/Qrcode/Main'
 import CertificateGenerator from './Components/Certificate/CertificateGenerator';
 import Attendance from './Components/Attendance/Attendance';
 import Register from './Components/Register/Register';
+import Student from './Components/Register/Student';
+import Teacher from './Components/Register/Teacher';
+import Others from './Components/Register/Others';
 
 function App() {
   return (
@@ -18,8 +21,11 @@ function App() {
       <Route path='/events' element={<Events/>}/>
       <Route path='/createevent' element={<CreateEvent/>}/>
       <Route path='/createcertificate/:name' element={<CertificateGenerator/>}/>
-      <Route path='/qrcode/:eventId' element={<Main />} />
+      <Route path='/qrcode/:eventname/:who' element={<Main />} />
       <Route path='/attendance/:eventId' element={<Attendance />} />
+      <Route path='/:eventname/Student' element={<Student />} />
+      <Route path='/:eventname/Teacher' element={<Teacher />} />
+      <Route path='/:eventname/Others' element={<Others />} />
     </Routes>
     </Router>
 

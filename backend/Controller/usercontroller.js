@@ -30,7 +30,7 @@ exports.register = async (req, res) => {
   try {
     const userData = req.body;
     const newUser = await UserModel.create(userData);
-    res.status(201).json({ message: "User created successfully", userId: newUser.id });
+    res.status(201).json({ message: "User created successfully", userId: newUser.id ,name:newUser.fullName});
   } catch (error) {
     console.error(`Error creating user: ${error}`);
     res.status(500).json({ error: "Internal Server Error" });
