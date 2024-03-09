@@ -3,7 +3,7 @@ import "./Register.css"; // You can add your custom styles here
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import url from '../../Config';
-
+import "./Teacherform.css"
 function Teacher() {
   const [fullName, setFullName] = useState('');
   const [icNumber, setIcNumber] = useState('');
@@ -130,33 +130,33 @@ function Teacher() {
   
 
   return (
-    <div>
-      <h1>{eventname}</h1>
-      <form onSubmit={handleFormSubmit}>
-        {/* Teacher Information */}
-        <label>
-          Full Name:
-          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-        </label>
-  
-        <label>
-          IC Number:
-          <input type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)} />
-        </label>
-  
-        <label>
-          Name of School:
-          <input type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} />
-        </label>
-        <label>
-          Contact number:
-          <input type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)} />
-        </label>
-  
-        {/* State Dropdown */}
-        <label>
+    <div className='container_form'>
+    <h1 className="h1">{eventname}</h1>
+    <form className="form-container" onSubmit={handleFormSubmit}>
+      {/* Teacher Information */}
+      <label className="label">
+        Full Name:
+        <input className="input-field" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+      </label>
+
+      <label className="label">
+        IC Number:
+        <input className="input-field" type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)} />
+      </label>
+
+      <label className="label">
+        Name of School:
+        <input className="input-field" type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} />
+      </label>
+      <label className="label">
+        Contact number:
+        <input className="input-field" type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)} />
+      </label>
+
+     
+      <label>
           School State:
-          <select value={state} onChange={(e) => handleSchoolStateChange(e.target.value)}>
+          <select value={state} onChange={(e) => handleSchoolStateChange(e.target.value)} className="input-field">
             <option value="">Select School State</option>
             {schoolStates.map((state) => (
               <option key={state} value={state}>
@@ -172,6 +172,7 @@ function Teacher() {
           <select
             value={district}
             onChange={(e) => handleSchoolDistrictChange(e.target.value)}
+            className="input-field"
           >
             <option value="">Select School District</option>
             {state === 'SELANGOR'
@@ -189,14 +190,14 @@ function Teacher() {
               : null}
           </select>
         </label>
-        <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
+      <label className="label">
+        Password:
+        <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </label>
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+      <button className="button" type="submit">Submit</button>
+    </form>
+  </div>
   );
 }
 

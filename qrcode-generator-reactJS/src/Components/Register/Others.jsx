@@ -3,7 +3,7 @@ import "./Register.css"; // You can add your custom styles here
 import url from '../../Config';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-
+import "./Teacherform.css"
 function Others() {
   const [fullName, setFullName] = useState('');
   const [icNumber, setIcNumber] = useState('');
@@ -127,81 +127,84 @@ function Others() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleFormSubmit}>
-        {/* Others Information */}
-        <label>
-          Full Name:
-          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-        </label>
-  
-        <label>
-          IC Number:
-          <input type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)} />
-        </label>
-  
-        {/* State Dropdown */}
-        <label>
-          School State:
-          <select value={state} onChange={(e) => handlestatechange(e.target.value)}>
-            <option value="">Select School State</option>
-            {schoolStates.map((state) => (
-              <option key={state} value={state}>
-                {state}
-              </option>
-            ))}
-          </select>
-        </label>
+    <div className='container_form'>
+          <h1 className="h1">{eventname}</h1>
 
-        {/* School District Dropdown */}
-        <label>
-          School District:
-          <select
-            value={district}
-            onChange={(e) => handledistrictchange(e.target.value)}
-          >
-            <option value="">Select School District</option>
-            {state === 'SELANGOR'
-              ? selangorDistricts.map((district) => (
-                  <option key={district} value={district}>
-                    {district}
-                  </option>
-                ))
-              : state === 'Kuala Lumpur'
-              ? kualaLumpurDistricts.map((district) => (
-                  <option key={district} value={district}>
-                    {district}
-                  </option>
-                ))
-              : null}
-          </select>
-        </label>
+    <form className="form-container" onSubmit={handleFormSubmit}>
+      {/* Others Information */}
+      <label className="label">
+        Full Name:
+        <input className="input-field" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+      </label>
 
-        <label>
-          Occupation:
-          <input type="text" value={Occupation} onChange={(e) => setOccupation(e.target.value)} />
-        </label>
-  
-        <label>
-          Parent or Visitor:
-          <select value={ParentOrVisitor} onChange={(e) => setParentOrVisitor(e.target.value)}>
-            <option value="">Select Option</option>
-            <option value="Parent">Parent</option>
-            <option value="Visitor">Visitor</option>
-          </select>
-        </label>
-  
-        <label>
-          Contact Number:
-          <input type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)} />
-        </label>
-        <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+      <label className="label">
+        IC Number:
+        <input className="input-field" type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)} />
+      </label>
+
+      {/* State Dropdown */}
+      <label className="label">
+        School State:
+        <select className="select-field" value={state} onChange={(e) => handlestatechange(e.target.value)}>
+          <option value="">Select School State</option>
+          {schoolStates.map((state) => (
+            <option key={state} value={state}>
+              {state}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {/* School District Dropdown */}
+      <label className="label">
+        School District:
+        <select
+          className="select-field"
+          value={district}
+          onChange={(e) => handledistrictchange(e.target.value)}
+        >
+          <option value="">Select School District</option>
+          {state === 'SELANGOR'
+            ? selangorDistricts.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))
+            : state === 'Kuala Lumpur'
+            ? kualaLumpurDistricts.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))
+            : null}
+        </select>
+      </label>
+
+      <label className="label">
+        Occupation:
+        <input className="input-field" type="text" value={Occupation} onChange={(e) => setOccupation(e.target.value)} />
+      </label>
+
+      <label className="label">
+        Parent or Visitor:
+        <select className="select-field" value={ParentOrVisitor} onChange={(e) => setParentOrVisitor(e.target.value)}>
+          <option value="">Select Option</option>
+          <option value="Parent">Parent</option>
+          <option value="Visitor">Visitor</option>
+        </select>
+      </label>
+
+      <label className="label">
+        Contact Number:
+        <input className="input-field" type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)} />
+      </label>
+      <label className="label">
+        Password:
+        <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </label>
+      <button className="button" type="submit">Submit</button>
+    </form>
+  </div>
   );
 }
 
