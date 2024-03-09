@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// import './Events.css';
+import './Events.css'; // Import the custom styles
 import url from '../../Config';
 
 const Events = () => {
@@ -19,58 +19,62 @@ const Events = () => {
       console.error('Error fetching events:', error);
     }
   };
-  const handleon = async (eventId) => {
+
+  const handleOn = async (eventId) => {
     console.log(`clicked on`);
     try {
-      const response =await axios.get(`${url}/candistributeOn/${eventId}`);
+      const response = await axios.get(`${url}/candistributeOn/${eventId}`);
       alert(response.data.message);
     } catch (error) {
       console.error('Error turning on certificate:', error);
     }
   };
 
-  const handleoff = async (eventId) => {
+  const handleOff = async (eventId) => {
     try {
-      const response =await axios.get(`${url}/candistributeOff/${eventId}`);
+      const response = await axios.get(`${url}/candistributeOff/${eventId}`);
       alert(response.data.message);
-
     } catch (error) {
       console.error('Error turning off certificate:', error);
     }
   };
+
   return (
-    <div className='eventsbg'>
-      <div className='events_top'>
-        <div className='eventshead'>
-          <h1 className='events_heading'>EVENTS</h1>
+    <div className='events-container'>
+      <div className='events-top'>
+        <div className='events-head'>
+          <h1 className='events-heading'>EVENTS</h1>
         </div>
-        <Link to='/createevent'><button className='event_btn'>Add Event</button></Link>
+        <Link to='/createevent'><button className='event-btn'>Add Event</button></Link>
       </div>
-      <div className='events_btm'>
+      <div className='events-bottom'>
         {events.map(event => (
-          <div key={event.eventId} className='event_card'>
-            <h2 className='event_name'>{event.eventName}</h2>
-            <p className='event_details'>
-              <strong className='detail_label'>Description:</strong> {event.eventDescription}<br />
-              <strong className='detail_label'>Timing:</strong> {event.eventTiming}<br />
-              <strong className='detail_label'>Day:</strong> {event.eventDay}<br />
-              <strong className='detail_label'>Location:</strong> {event.eventLocation}
+          <div key={event.eventId} className='event-card'>
+            <h2 className='event-name'>{event.eventName}</h2>
+            <p className='event-details'>
+              <strong className='detail-label'>Description:</strong> {event.eventDescription}<br />
+              <strong className='detail-label'>Timing:</strong> {event.eventTiming}<br />
+              <strong className='detail-label'>Day:</strong> {event.eventDay}<br />
+              <strong className='detail-label'>Location:</strong> {event.eventLocation}
             </p>
             <div className="button-group">
-              <Link to={`/qrcode/${event.eventName}/:Others`} className="Link">
-                <button className='generate_qr_btn'>Generate QR Code Others</button>
+              <Link to={`/qrcode/${event.eventName}/:Others`} className="link">
+                <button className='generate-qr-btn'>Generate QR Code Others</button>
               </Link>
-              <Link to={`/qrcode/${event.eventName}/:Teacher`} className="Link">
-                <button className='generate_qr_btn'>Generate QR Code for Teacher</button>
+              <Link to={`/qrcode/${event.eventName}/:Teacher`} className="link">
+                <button className='generate-qr-btn'>Generate QR Code for Teacher</button>
               </Link>
-              <Link to={`/qrcode/${event.eventName}/:Student`} className="Link">
-                <button className='generate_qr_btn'>Generate QR Code for Student</button>
+              <Link to={`/qrcode/${event.eventName}/:Student`} className="link">
+                <button className='generate-qr-btn'>Generate QR Code for Student</button>
               </Link>
               <Link to={`/attendance/${event.eventName}`}>
-                <button className='attendance_btn'>Get Attendance</button>
+                <button className='attendance-btn'>Get Attendance</button>
               </Link>
-              <button onClick={() => handleon(event.eventId)}>On Certificate</button>
-              <button onClick={() => handleoff(event.eventId)}>Off Certificate</button>
+              <div className='btn_grp'>
+                <button className='on-certificate-btn' onClick={() => handleOn(event.eventId)}>On Certificate</button>
+                <button className='off-certificate-btn' onClick={() => handleOff(event.eventId)}>Off Certificate</button>
+
+              </div>  
             </div>
           </div>
         ))}
