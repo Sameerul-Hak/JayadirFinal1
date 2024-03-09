@@ -11,21 +11,23 @@ import Register from './Components/Register/Register';
 import Student from './Components/Register/Student';
 import Teacher from './Components/Register/Teacher';
 import Others from './Components/Register/Others';
+import CertificateLogin from './Components/Login/CertificateLogin';
 
 function App() {
   return (
     <Router>
     <Routes>
-      <Route path='/' element={<Register/>}/>
-      <Route path='/login' element={<Login/>}/>
+      <Route path='/' element={<Login/>}/>
+      <Route path='/register' element={<Register/>}/>
       <Route path='/events' element={<Events/>}/>
       <Route path='/createevent' element={<CreateEvent/>}/>
-      <Route path='/createcertificate/:name' element={<CertificateGenerator/>}/>
+      <Route path='/createcertificate/:name/:eventid' element={<CertificateGenerator/>}/>
       <Route path='/qrcode/:eventname/:who' element={<Main />} />
-      <Route path='/attendance/:eventId' element={<Attendance />} />
+      <Route path='/attendance/:eventName' element={<Attendance />} />
       <Route path='/:eventname/Student' element={<Student />} />
       <Route path='/:eventname/Teacher' element={<Teacher />} />
       <Route path='/:eventname/Others' element={<Others />} />
+      <Route path='/certificateLoging' element={<CertificateLogin />} />
     </Routes>
     </Router>
 

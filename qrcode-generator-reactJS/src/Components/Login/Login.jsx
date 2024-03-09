@@ -30,7 +30,7 @@ const Login = () => {
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="admin-login-input" />
         <button type="submit" className="admin-login-button">Login</button>
       </form>
-      <p className="admin-login-register-text">Do not have an account? <Link to="/">Register</Link></p>
+      <p className="admin-login-register-text">Do not have an account? <Link to="/register">Register</Link></p>
     </div>
   );
 };

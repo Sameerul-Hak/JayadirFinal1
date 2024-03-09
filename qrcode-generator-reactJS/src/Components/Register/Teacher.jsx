@@ -14,6 +14,8 @@ function Teacher() {
   const [district, setDistrict] = useState('');
   const {eventname}=useParams();
   const schoolStates = ['SELANGOR', 'Kuala Lumpur'];
+  const [password, setPassword] = useState('');
+
   const selangorDistricts = [
     'Sabak Bernam',
     'Hulu Selangor',
@@ -86,6 +88,8 @@ function Teacher() {
         'selectedSchoolState',
         'selectedSchoolDistrict',
         'password',
+        'ParentOrVisitor',
+        'Occupation'
       ];
   
       // Create an object with all fields set to null
@@ -100,14 +104,24 @@ function Teacher() {
         phonenumber,
         state,
         district,
+        whoami:"teacher",
+        password
       };
   
       console.log(formData);
   
-      const response = await axios.post(`${url}/${eventname}`, formData);
+      const response = await axios.post(`${url}/post/${eventname}`, formData);
   
       // Handle the response from the server if needed
       console.log(response.data);
+      if(response.status==201)
+      {
+        alert("Thank you for Registering ! you may leave the site now")
+      }
+      else{
+        
+        alert("Some Error Occured")
+      }
     } catch (err) {
       // Handle errors
       console.error(err);
@@ -175,7 +189,10 @@ function Teacher() {
               : null}
           </select>
         </label>
-
+        <label>
+          Password:
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </label>
 
         <button type="submit">Submit</button>
       </form>

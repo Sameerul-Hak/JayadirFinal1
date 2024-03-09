@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import "./Register.css"
+import url from '../../Config';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 function Student() {
   const [fullName, setFullName] = useState('');
   const [icNumber, setIcNumber] = useState('');
@@ -29,6 +32,7 @@ function Student() {
   const [selectedSchoolState, setSelectedSchoolState] = useState('');
   const [selectedSchoolDistrict, setSelectedSchoolDistrict] = useState('');
   const [password, setPassword] = useState('');
+  const {eventname}=useParams();
 
   const schoolStates = ['SELANGOR', 'Kuala Lumpur'];
   const selangorDistricts = [
@@ -85,40 +89,90 @@ function Student() {
     setSelectedDistrict(selectedDistrict);
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    const formData = {
-      fullName,
-      icNumber,
-      dateOfBirth,
-      schoolName,
-      date,
-      Class,
-      Race,
-      Fathername,
-      fatherage,
-      fatheroccupation,
-      fatherstatus,
-      mothername,
-      motherage,
-      motheroccupation,
-      motherstatus,
-      homeaddress,
-      state: selectedState,
-      district: selectedDistrict,
-      phonenumber,
-      phonenumberfather,
-      phonenumbermother,
-      picture,
-      whoami,
-      selectedSchoolState,
-      selectedSchoolDistrict,
-      password,
-    };
-    console.log(formData);
-    // let arrayofname=
+  const handleFormSubmit = async(e) => {
     // Add logic to send the form data to the server or perform any other actions
+    try {
+      const allFields = [
+        'fullName',
+        'icNumber',
+        'dateOfBirth',
+        'schoolName',
+        'date',
+        'Class',
+        'Race',
+        'Fathername',
+        'fatherage',
+        'fatheroccupation',
+        'fatherstatus',
+        'mothername',
+        'motherage',
+        'motheroccupation',
+        'motherstatus',
+        'homeaddress',
+        'state',
+        'district',
+        'phonenumber',
+        'phonenumberfather',
+        'phonenumbermother',
+        'picture',
+        'whoami',
+        'selectedSchoolState',
+        'selectedSchoolDistrict',
+        'password',
+        'ParentOrVisitor',
+        'Occupation'
+      ];
+      const nullFormData = Object.fromEntries(allFields.map((field) => [field, null]));
+  
+      e.preventDefault();
+      // Handle form submission logic here
+      const formData = {
+        ...nullFormData,
+        fullName,
+        icNumber,
+        dateOfBirth,
+        schoolName,
+        date,
+        Class,
+        Race,
+        Fathername,
+        fatherage,
+        fatheroccupation,
+        fatherstatus,
+        mothername,
+        motherage,
+        motheroccupation,
+        motherstatus,
+        homeaddress,
+        state: selectedState,
+        district: selectedDistrict,
+        phonenumber,
+        phonenumberfather,
+        phonenumbermother,
+        picture,
+        whoami:"student",
+        selectedSchoolState,
+        selectedSchoolDistrict,
+        password,
+        
+      };
+      console.log(formData);
+      // let arrayofname=
+      const response = await axios.post(`${url}/post/${eventname}`, formData);
+  
+      // Handle the response from the server if needed
+      console.log(response.data);
+      if(response.status==201)
+      {
+        alert("Thank you for Registering ! you may leave the site now")
+      }
+      else{
+        
+        alert("Some Error Occured")
+      }
+    } catch (error) {
+      
+    }
   };
 
   return (
@@ -228,10 +282,7 @@ function Student() {
           <input type="text" value={picture} onChange={(e) => setPicture(e.target.value)} />
         </label>
   
-        <label>
-          Who Am I:
-          <input type="text" value={whoami} onChange={(e) => setWhoAmI(e.target.value)} />
-        </label>
+        
   
         <label>
           Selected State:

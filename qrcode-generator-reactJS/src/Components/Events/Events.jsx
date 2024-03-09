@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './Events.css';
+// import './Events.css';
 import url from '../../Config';
 
 const Events = () => {
@@ -19,7 +19,25 @@ const Events = () => {
       console.error('Error fetching events:', error);
     }
   };
+  const handleon = async (eventId) => {
+    console.log(`clicked on`);
+    try {
+      const response =await axios.get(`${url}/candistributeOn/${eventId}`);
+      alert(response.data.message);
+    } catch (error) {
+      console.error('Error turning on certificate:', error);
+    }
+  };
 
+  const handleoff = async (eventId) => {
+    try {
+      const response =await axios.get(`${url}/candistributeOff/${eventId}`);
+      alert(response.data.message);
+
+    } catch (error) {
+      console.error('Error turning off certificate:', error);
+    }
+  };
   return (
     <div className='eventsbg'>
       <div className='events_top'>
@@ -48,9 +66,11 @@ const Events = () => {
               <Link to={`/qrcode/${event.eventName}/:Student`} className="Link">
                 <button className='generate_qr_btn'>Generate QR Code for Student</button>
               </Link>
-              <Link to={`/attendance/${event.eventId}`}>
+              <Link to={`/attendance/${event.eventName}`}>
                 <button className='attendance_btn'>Get Attendance</button>
               </Link>
+              <button onClick={() => handleon(event.eventId)}>On Certificate</button>
+              <button onClick={() => handleoff(event.eventId)}>Off Certificate</button>
             </div>
           </div>
         ))}

@@ -28,6 +28,11 @@ const Event = db.define('EventTable', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  candistribute: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'NO',
+  },
 });
 
 module.exports = Event;

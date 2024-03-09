@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import "./Register.css"; // You can add your custom styles here
+import url from '../../Config';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function Others() {
   const [fullName, setFullName] = useState('');
   const [icNumber, setIcNumber] = useState('');
-  const [occupation, setOccupation] = useState('');
-  const [parentOrVisitor, setParentOrVisitor] = useState('');
-  const [contactNumber, setContactNumber] = useState('');
+  const [Occupation, setOccupation] = useState('');
+  const [ParentOrVisitor, setParentOrVisitor] = useState('');
+  const [phonenumber, setContactNumber] = useState('');
 
   const [state, setstate] = useState('');
   const [district, setDistrict] = useState('');
+  const {eventname}=useParams();
+  const [password, setPassword] = useState('');
 
   const schoolStates = ['SELANGOR', 'Kuala Lumpur'];
   const selangorDistricts = [
@@ -52,18 +57,73 @@ function Others() {
     setDistrict(district);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async(e) => {
     e.preventDefault();
-    const formData = {
-      fullName,
-      icNumber,
-      state,
-      district,
-      occupation,
-      parentOrVisitor,
-      contactNumber,
-    };
-    console.log(formData);
+    
+    try {
+      const allFields = [
+        'fullName',
+        'icNumber',
+        'dateOfBirth',
+        'schoolName',
+        'date',
+        'Class',
+        'Race',
+        'Fathername',
+        'fatherage',
+        'fatheroccupation',
+        'fatherstatus',
+        'mothername',
+        'motherage',
+        'motheroccupation',
+        'motherstatus',
+        'homeaddress',
+        'state',
+        'district',
+        'phonenumber',
+        'phonenumberfather',
+        'phonenumbermother',
+        'picture',
+        'whoami',
+        'selectedSchoolState',
+        'selectedSchoolDistrict',
+        'password',
+        'ParentOrVisitor',
+        'Occupation'
+      ];
+  
+      // Create an object with all fields set to null
+      const nullFormData = Object.fromEntries(allFields.map((field) => [field, null]));
+  
+      // Update the nullFormData with the provided data
+      const formData = {
+        ...nullFormData,
+        fullName,
+        icNumber,
+        phonenumber,
+        state,
+        district,
+        whoami:"others",
+        Occupation,
+        ParentOrVisitor,
+        password
+      };
+      console.log(formData);
+      const response = await axios.post(`${url}/post/${eventname}`, formData);
+  
+      // Handle the response from the server if needed
+      console.log(response.data);
+      if(response.status==201)
+      {
+        alert("Thank you for Registering ! you may leave the site now")
+      }
+      else{
+        
+        alert("Some Error Occured")
+      }
+    } catch (error) {
+      
+    }
   };
 
   return (
@@ -119,12 +179,12 @@ function Others() {
 
         <label>
           Occupation:
-          <input type="text" value={occupation} onChange={(e) => setOccupation(e.target.value)} />
+          <input type="text" value={Occupation} onChange={(e) => setOccupation(e.target.value)} />
         </label>
   
         <label>
           Parent or Visitor:
-          <select value={parentOrVisitor} onChange={(e) => setParentOrVisitor(e.target.value)}>
+          <select value={ParentOrVisitor} onChange={(e) => setParentOrVisitor(e.target.value)}>
             <option value="">Select Option</option>
             <option value="Parent">Parent</option>
             <option value="Visitor">Visitor</option>
@@ -133,9 +193,12 @@ function Others() {
   
         <label>
           Contact Number:
-          <input type="text" value={contactNumber} onChange={(e) => setContactNumber(e.target.value)} />
+          <input type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)} />
         </label>
-  
+        <label>
+          Password:
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </label>
         <button type="submit">Submit</button>
       </form>
     </div>

@@ -19,7 +19,8 @@ const CreateEvent = () => {
         eventDescription,
         eventTiming,
         eventDay,
-        eventLocation
+        eventLocation,
+        "candistribute":"NO"
       });
       console.log(response.data); 
 
@@ -30,7 +31,7 @@ const CreateEvent = () => {
         tablename+=arrayofname[i];
       }
       console.log(tablename);
-      const tablecreated=await axios.get(`${url}/${tablename}`);
+      const tablecreated=await axios.get(`${url}/createtable/${tablename}`);
       if(tablecreated.data!="")
       {
         alert("table created successfully");

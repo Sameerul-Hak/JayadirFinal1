@@ -14,7 +14,6 @@ const Register = () => {
     try {
       await axios.post(`${url}/admin/register`, { username, password });
       alert('Admin registered successfully!');
-      // Redirect to login page or handle navigation as needed
     } catch (error) {
       console.error('Error registering admin:', error);
       alert('Failed to register admin');
@@ -30,7 +29,7 @@ const Register = () => {
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="admin-register-input" />
         <button type="submit" className="admin-register-button">Register</button>
       </form>
-      <p className="admin-register-login-text">Already have an account? <Link to="/login">Login</Link></p>
+      <p className="admin-register-login-text">Already have an account? <Link to="/">Login</Link></p>
       {/* <Link to=>get ur certificate</Link> */}
       <h1 onClick={()=>navigate(`/createcertificate/${searchParams.get('name')}`)}>get your certificate</h1>
     </div>

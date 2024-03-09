@@ -1,9 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import jsPDF from 'jspdf'
 import img from '../../assets/template-1.png'
 import { useParams } from "react-router-dom"
+import axios from 'axios';
+import url from '../../Config';
 
 const generateCertificate = (name) => {
+
+
+  // const[visble,setvisible]=useState(false);
+  // useEffect(()=>{
+  //   const changevisible=async()=>{
+
+  //     try {
+  //       const response=await axios.get()
+  //     } catch (error) {
+        
+  //     }
+
+  //   }
+  // },[])
   // Create a new jsPDF instance
   const doc = new jsPDF();
   
@@ -25,10 +41,35 @@ const generateCertificate = (name) => {
 };
 
 function CertificateGenerator() {
-  const { name } = useParams();
+  const { name,eventid } = useParams();
+  const [isvisble,setvisbile]=useState(false);
+  useEffect(()=>{
+    const decide=async()=>{
+      try{
+        const response=await axios.get(`${url}/candistribute/${eventid}`);
+        console.log(response.data.candistributeValue);
+        if(response.data.candistributeValue==="ON")
+        {
+          setvisbile(true);
+        }
+        else{
+          setvisbile(false)
+        }
+      }
+      catch(err)
+      {
+        console.log(err);
+      }
+    }
+    decide();
+  },[])
     return (
       <div>
-        <button onClick={() => generateCertificate(name)}>Generate Certificate</button>
+        <h1>{name},{eventid}</h1>
+        {
+          isvisble &&
+          <button onClick={() => generateCertificate(name)}>Generate Certificate</button>
+        }
       </div>
     );
   }
