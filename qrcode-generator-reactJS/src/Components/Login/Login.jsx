@@ -23,6 +23,7 @@ const Login = () => {
   };
 
   return (
+    <div className="admin-login-page">
     <div className="admin-login-container">
       <h1 className="admin-login-heading">Admin Login</h1>
       <form onSubmit={handleSubmit} className="admin-login-form">
@@ -31,6 +32,7 @@ const Login = () => {
         <button type="submit" className="admin-login-button">Login</button>
       </form>
       <p className="admin-login-register-text">Do not have an account? <Link to="/register">Register</Link></p>
+    </div>
     </div>
   );
 };

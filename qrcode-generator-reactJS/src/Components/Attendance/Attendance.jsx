@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import './Attendance.css';
 import url from '../../Config';
-
 const Attendance = () => {
   const [attendance, setAttendance] = useState([]);
   const { eventName } = useParams();
@@ -150,7 +149,7 @@ const Attendance = () => {
             </thead>
             <tbody>
               {attendance.students &&
-                attendance.students.map((entry) => (
+                attendance.teachers.map((entry) => (
                   <tr key={entry.id} className="attendance-row">
                     <td>{entry.id}</td>
                     <td>{entry.fullName}</td>

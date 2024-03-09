@@ -14,6 +14,7 @@ const Register = () => {
     try {
       await axios.post(`${url}/admin/register`, { username, password });
       alert('Admin registered successfully!');
+      navigate("/events")
     } catch (error) {
       console.error('Error registering admin:', error);
       alert('Failed to register admin');
@@ -21,6 +22,8 @@ const Register = () => {
   };
 
   return (
+    <div className="admin-register-page">
+
     <div className="admin-register-container">
       <h1>{searchParams.get('name')}</h1>
       <h1 className="admin-register-heading">Admin Register</h1>
@@ -30,9 +33,8 @@ const Register = () => {
         <button type="submit" className="admin-register-button">Register</button>
       </form>
       <p className="admin-register-login-text">Already have an account? <Link to="/">Login</Link></p>
-      {/* <Link to=>get ur certificate</Link> */}
-      <h1 onClick={()=>navigate(`/createcertificate/${searchParams.get('name')}`)}>get your certificate</h1>
     </div>
+    </div>  
   );
 };
 
