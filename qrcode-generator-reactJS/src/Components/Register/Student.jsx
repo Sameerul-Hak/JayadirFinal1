@@ -37,6 +37,7 @@ function Student() {
   const [password, setPassword] = useState('');
   const {eventname}=useParams();
   const [motherStatus, setMotherStatus] = useState('');
+  const [Email, setEmail] = useState('');
 
   const handleMotherStatusChange = (e) => {
     setMotherStatus(e.target.value);
@@ -127,7 +128,8 @@ function Student() {
         'selectedSchoolDistrict',
         'password',
         'ParentOrVisitor',
-        'Occupation'
+        'Occupation',
+        'Email'
       ];
       const nullFormData = Object.fromEntries(allFields.map((field) => [field, null]));
   
@@ -156,11 +158,12 @@ function Student() {
         phonenumber,
         phonenumberfather,
         phonenumbermother,
-        picture,
+        picture:"",
         whoami:"student",
         selectedSchoolState,
         selectedSchoolDistrict,
         password,
+        Email
         
       };
       console.log(formData);
@@ -386,11 +389,12 @@ function Student() {
           Mother's Phone Number:
           <input className="input-field" type="text" value={phonenumbermother} onChange={(e) => setPhoneNumberMother(e.target.value)} />
         </label>
-  
         <label className="label">
-          Picture:
-          <input className="input-field" type="text" value={picture} onChange={(e) => setPicture(e.target.value)} />
+          Email:
+          <input className="input-field" type="text" value={Email} onChange={(e) => setEmail(e.target.value)} />
         </label>
+  
+       
   
         
   

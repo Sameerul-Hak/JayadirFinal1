@@ -15,6 +15,7 @@ function Teacher() {
   const {eventname}=useParams();
   const schoolStates = ['SELANGOR', 'Kuala Lumpur'];
   const [password, setPassword] = useState('');
+  const [Email, setEmail] = useState('');
 
   const selangorDistricts = [
     'Sabak Bernam',
@@ -89,7 +90,8 @@ function Teacher() {
         'selectedSchoolDistrict',
         'password',
         'ParentOrVisitor',
-        'Occupation'
+        'Occupation',
+        'Email'
       ];
   
       // Create an object with all fields set to null
@@ -105,7 +107,8 @@ function Teacher() {
         state,
         district,
         whoami:"teacher",
-        password
+        password,
+        Email
       };
   
       console.log(formData);
@@ -189,6 +192,10 @@ function Teacher() {
                 ))
               : null}
           </select>
+        </label>
+        <label className="label">
+          Email:
+          <input className="input-field" type="text" value={Email} onChange={(e) => setEmail(e.target.value)} />
         </label>
       <label className="label">
         Password:

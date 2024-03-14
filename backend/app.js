@@ -46,26 +46,26 @@ app.get("/createtable/:eventname", async (req, res) => {
       selectedSchoolDistrict VARCHAR(255) DEFAULT NULL,
       password VARCHAR(255) DEFAULT NULL  ,
       ParentOrVisitor varchar(255) DEFAULT NULL,
-      Occupation varchar(255) DEFAULT NULL
+      Occupation varchar(255) DEFAULT NULL,
+      Email varchar(255) DEFAULT NULL
       );
       `;
       
       try {
         await sequelize.query(tableQuery);
-    res.status(200).json({ message: `Table ${eventname}Attendance created successfully` });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-
-app.post("/post/:register", async (req, res) => {
-  try {
-    const { register } = req.params;
-    const { fullName, icNumber, dateOfBirth, schoolName, date, Class, Race, Fathername, fatherage, fatheroccupation, fatherstatus, mothername, motherage, motheroccupation, motherstatus, homeaddress, state, district, phonenumber, phonenumberfather, phonenumbermother, picture, whoami, selectedSchoolState, selectedSchoolDistrict, password,Occupation, ParentOrVisitor} = req.body;
+        res.status(200).json({ message: `Table ${eventname}Attendance created successfully` });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    });
     
-    // Create table if not exists
+
+  app.post("/post/:register", async (req, res) => {
+    try {
+    const { register } = req.params;
+    const { fullName, icNumber, dateOfBirth, schoolName, date, Class, Race, Fathername, fatherage, fatheroccupation, fatherstatus, mothername, motherage, motheroccupation, motherstatus, homeaddress, state, district, phonenumber, phonenumberfather, phonenumbermother, picture, whoami, selectedSchoolState, selectedSchoolDistrict, password,Occupation, ParentOrVisitor,Email} = req.body;
+    console.log({ fullName, icNumber, dateOfBirth, schoolName, date, Class, Race, Fathername, fatherage, fatheroccupation, fatherstatus, mothername, motherage, motheroccupation, motherstatus, homeaddress, state, district, phonenumber, phonenumberfather, phonenumbermother, picture, whoami, selectedSchoolState, selectedSchoolDistrict, password,Occupation, ParentOrVisitor,Email});
     const tableQuery = `
       CREATE TABLE IF NOT EXISTS ${register}Attendance (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -96,21 +96,22 @@ app.post("/post/:register", async (req, res) => {
         selectedSchoolDistrict VARCHAR(255) DEFAULT NULL,
         password VARCHAR(255) DEFAULT NULL,
         ParentOrVisitor varchar(255) DEFAULT NULL,
-        Occupation varchar(255) DEFAULT NULL
+        Occupation varchar(255) DEFAULT NULL,
+        Email varchar(255) DEFAULT NULL
         );
         `;
-
-    await sequelize.query(tableQuery);
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // Insert data into the table
-    const insertQuery = `
-      INSERT INTO ${register}Attendance (fullName, icNumber, dateOfBirth, schoolName, date, Class, Race, Fathername, fatherage, fatheroccupation, fatherstatus, mothername, motherage, motheroccupation, motherstatus, homeaddress, state, district, phonenumber, phonenumberfather, phonenumbermother, picture, whoami, selectedSchoolState, selectedSchoolDistrict, password,Occupation,ParentOrVisitor)
-      VALUES (:fullName, :icNumber, :dateOfBirth, :schoolName, :date, :Class, :Race, :Fathername, :fatherage, :fatheroccupation, :fatherstatus, :mothername, :motherage, :motheroccupation, :motherstatus, :homeaddress, :state, :district, :phonenumber, :phonenumberfather, :phonenumbermother, :picture, :whoami, :selectedSchoolState, :selectedSchoolDistrict, :hashedPassword, :Occupation, :ParentOrVisitor);
+        
+        await sequelize.query(tableQuery);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        // Insert data into the table
+        const insertQuery = `
+      INSERT INTO ${register}Attendance (fullName, icNumber, dateOfBirth, schoolName, date, Class, Race, Fathername, fatherage, fatheroccupation, fatherstatus, mothername, motherage, motheroccupation, motherstatus, homeaddress, state, district, phonenumber, phonenumberfather, phonenumbermother, picture, whoami, selectedSchoolState, selectedSchoolDistrict, password,Occupation,ParentOrVisitor,Email)
+      VALUES (:fullName, :icNumber, :dateOfBirth, :schoolName, :date, :Class, :Race, :Fathername, :fatherage, :fatheroccupation, :fatherstatus, :mothername, :motherage, :motheroccupation, :motherstatus, :homeaddress, :state, :district, :phonenumber, :phonenumberfather, :phonenumbermother, :picture, :whoami, :selectedSchoolState, :selectedSchoolDistrict, :hashedPassword, :Occupation, :ParentOrVisitor,:Email);
     `;
 
     await sequelize.query(insertQuery, {
       replacements: {
-        fullName, icNumber, dateOfBirth, schoolName, date, Class, Race, Fathername, fatherage, fatheroccupation, fatherstatus, mothername, motherage, motheroccupation, motherstatus, homeaddress, state, district, phonenumber, phonenumberfather, phonenumbermother, picture, whoami, selectedSchoolState, selectedSchoolDistrict, hashedPassword,Occupation,ParentOrVisitor
+        fullName, icNumber, dateOfBirth, schoolName, date, Class, Race, Fathername, fatherage, fatheroccupation, fatherstatus, mothername, motherage, motheroccupation, motherstatus, homeaddress, state, district, phonenumber, phonenumberfather, phonenumbermother, picture, whoami, selectedSchoolState, selectedSchoolDistrict, hashedPassword,Occupation,ParentOrVisitor,Email
       }
     });
 
@@ -298,6 +299,49 @@ app.get("/attendance/:tablename", async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+app.post("/auth/forgotPassword", async (req, res) => {
+  try {
+    const { phoneNumber, email, registeredEvent, newPassword } = req.body;
+
+    // Ensure both phone number and email are provided
+    if (!phoneNumber || !email) {
+      return res.status(400).json({ error: "Please provide both phone number and email." });
+    }
+
+    // Construct the query to fetch the user based on both phone number and email
+    const query = `
+      SELECT * FROM ${registeredEvent}Attendance WHERE phonenumber='${phoneNumber}' AND email='${email}'
+    `;
+
+    // Execute the query
+    const [user] = await sequelize.query(query, {
+      type: Sequelize.QueryTypes.SELECT
+    });
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    // Update the user's password with the new one
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const updateQuery = `UPDATE ${registeredEvent}Attendance SET password=:hashedPassword WHERE id=:userId`;
+
+    await sequelize.query(updateQuery, {
+      replacements: {
+        hashedPassword,
+        userId: user.id
+      }
+    });
+
+    res.status(200).json({ message: "Password updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 
 

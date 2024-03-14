@@ -11,6 +11,7 @@ function CertificateLogin() {
   const [selectedTable, setSelectedTable] = useState('');
   const [id, setid] = useState('');
   const navigate=useNavigate();
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,8 +56,13 @@ function CertificateLogin() {
         localStorage.setItem('userToken', loginResponse.data.token);
         localStorage.setItem('userId', loginResponse.data.user.id);
         localStorage.setItem('eventId', eventId);
+        if(loginResponse.data.user.whoami=='others')
+        {
+
+          navigate(`/createcertificate/${loginResponse.data.user.fullName}/${eventId}/others/${loginResponse.data.user.icNumber}`);
+        }
         // Successful login, navigate to the desired route
-        navigate(`/createcertificate/${loginResponse.data.user.fullName}/${eventId}`);
+        else if(loginResponse.data.user.whoami=='student' || loginResponse.data.user.whoami=='teacher')navigate(`/createcertificate/${loginResponse.data.user.fullName}/${eventId}/${loginResponse.data.user.icNumber}`);
       } else {
         setError('Login failed');
       }
@@ -94,6 +100,9 @@ function CertificateLogin() {
       <button type="button" onClick={handleLogin} className="login-button">
         Login
       </button>
+      <div onClick={()=>navigate('/certificateLoging/forget')}>
+        Forget password?
+      </div>
     </form>
   </div>
   </div>

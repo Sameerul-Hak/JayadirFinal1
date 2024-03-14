@@ -10,7 +10,7 @@ function Others() {
   const [Occupation, setOccupation] = useState('');
   const [ParentOrVisitor, setParentOrVisitor] = useState('');
   const [phonenumber, setContactNumber] = useState('');
-
+  const [Email, setEmail] = useState('');
   const [state, setstate] = useState('');
   const [district, setDistrict] = useState('');
   const {eventname}=useParams();
@@ -89,7 +89,8 @@ function Others() {
         'selectedSchoolDistrict',
         'password',
         'ParentOrVisitor',
-        'Occupation'
+        'Occupation',
+        'Email'
       ];
   
       // Create an object with all fields set to null
@@ -106,7 +107,9 @@ function Others() {
         whoami:"others",
         Occupation,
         ParentOrVisitor,
-        password
+        password,
+        Email
+
       };
       console.log(formData);
       const response = await axios.post(`${url}/post/${eventname}`, formData);
@@ -198,6 +201,10 @@ function Others() {
         Contact Number:
         <input className="input-field" type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)} />
       </label>
+      <label className="label">
+          Email:
+          <input className="input-field" type="text" value={Email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
       <label className="label">
         Password:
         <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />

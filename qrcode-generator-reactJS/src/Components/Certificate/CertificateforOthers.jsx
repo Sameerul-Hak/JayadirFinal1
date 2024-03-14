@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import jsPDF from 'jspdf';
-import img from '../../assets/StudentTeacher.png';
+import img from '../../assets/OthersCertificate.png';
 import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 import url from '../../Config';
@@ -24,11 +24,12 @@ const generateCertificate = (name,ic) => {
   localStorage.removeItem('eventId');
 };
 
-function CertificateGenerator() {
+function CertificateforOthers() {
   const { name, eventid } = useParams();
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate(); // Use useNavigate hook
   const{ic}=useParams();
+
   useEffect(() => {
     const decide = async () => {
       try {
@@ -69,4 +70,4 @@ function CertificateGenerator() {
   );
 }
 
-export default CertificateGenerator;
+export default CertificateforOthers;

@@ -30,7 +30,8 @@ function Main() {
     { 
       eventnameConverted+=convertedname[i];
     }
-    setUrlInput(`https://jayadiri.netlify.app/${eventnameConverted}/${who.substring(1)}`);
+    // /?eventname=event1&who=others
+    setUrlInput(`https://jayadiri.netlify.app/?eventname=${eventnameConverted}&who=${who.substring(1)}`);
   }, [eventname]);
 
   function getQrCode() {

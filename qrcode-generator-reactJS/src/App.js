@@ -12,6 +12,8 @@ import Student from './Components/Register/Student';
 import Teacher from './Components/Register/Teacher';
 import Others from './Components/Register/Others';
 import CertificateLogin from './Components/Login/CertificateLogin';
+import ForgetPassword from './Components/Register/ForgetPassword';
+import CertificateforOthers from './Components/Certificate/CertificateforOthers';
 
 function App() {
   return (
@@ -21,13 +23,15 @@ function App() {
       <Route path='/register' element={<Register/>}/>
       <Route path='/events' element={<Events/>}/>
       <Route path='/createevent' element={<CreateEvent/>}/>
-      <Route path='/createcertificate/:name/:eventid' element={<CertificateGenerator/>}/>
+      <Route path='/createcertificate/:name/:eventid/:ic' element={<CertificateGenerator/>}/>
+      <Route path='/createcertificate/:name/:eventid/others/:ic' element={<CertificateforOthers/>}/>
       <Route path='/qrcode/:eventname/:who' element={<Main />} />
       <Route path='/attendance/:eventName' element={<Attendance />} />
       <Route path='/:eventname/Student' element={<Student />} />
       <Route path='/:eventname/Teacher' element={<Teacher />} />
       <Route path='/:eventname/Others' element={<Others />} />
       <Route path='/certificateLoging' element={<CertificateLogin />} />
+      <Route path='/certificateLoging/forget' element={<ForgetPassword />} />
     </Routes>
     </Router>
 
