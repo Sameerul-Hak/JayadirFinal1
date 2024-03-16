@@ -67,8 +67,8 @@ function CertificateLogin() {
         setError('Login failed');
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      setError('Internal server error');
+      // console.error('Error during login:', error.response.data.error);
+      setError(`${error.response.data.error}`);
     }
   };
   
@@ -89,9 +89,9 @@ function CertificateLogin() {
       <label className="input-label">
         Select Table:
         <select value={selectedTable} onChange={(e) => setSelectedTable(e.target.value)} className="input-field">
-          <option value="">Select a table</option>
+          <option value="">Select a your registered events</option>
           {tables.map((table, index) => (
-            <option key={index} value={table}>
+            <option key={index} value={table} >
               {table}
             </option>
           ))}
@@ -100,7 +100,7 @@ function CertificateLogin() {
       <button type="button" onClick={handleLogin} className="login-button">
         Login
       </button>
-      <div onClick={()=>navigate('/certificateLoging/forget')}>
+      <div onClick={()=>navigate('/certificateLoging/forget')} style={{textAlign:"center",padding:"10px"}}>
         Forget password?
       </div>
     </form>

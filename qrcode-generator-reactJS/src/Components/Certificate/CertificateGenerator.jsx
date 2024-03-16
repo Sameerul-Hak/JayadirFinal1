@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import jsPDF from 'jspdf';
-import img from '../../assets/StudentTeacher.png';
+import img from '../../assets/StuTea.png';
 import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 import url from '../../Config';
 import './certificateGen.css'; // Import the CSS file
 
-const generateCertificate = (name,ic) => {
+const capitalizeFirstLetter = (name) => {
+  return name.charAt(0).toUpperCase() + name.slice(1);
+};
+const generateCertificate = (name, ic) => {
   const doc = new jsPDF();
 
   // Add background image
   doc.addImage(img, 'PNG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
 
-  // Add recipient name
+  // Add recipient name with capitalized first letter
+  const capitalizedFirstName = capitalizeFirstLetter(name);
   doc.setFontSize(36);
   doc.setFont('helvetica');
-  doc.text(`${name} ${ic}`, 130, 100, { align: 'center' });
+  doc.text(`${capitalizedFirstName} ${ic}`, 130, 105, { align: 'center' });
 
   // Save the PDF
-  doc.save(`${name}.pdf`);
+  doc.save(`${capitalizedFirstName}.pdf`);
   localStorage.removeItem('userToken');
   localStorage.removeItem('userId');
   localStorage.removeItem('eventId');

@@ -10,7 +10,7 @@ function Others() {
   const [Occupation, setOccupation] = useState('');
   const [ParentOrVisitor, setParentOrVisitor] = useState('');
   const [phonenumber, setContactNumber] = useState('');
-  const [Email, setEmail] = useState('');
+  const [Email, setEmail] = useState(''); 
   const [state, setstate] = useState('');
   const [district, setDistrict] = useState('');
   const {eventname}=useParams();
@@ -95,7 +95,11 @@ function Others() {
   
       // Create an object with all fields set to null
       const nullFormData = Object.fromEntries(allFields.map((field) => [field, null]));
-  
+      const icNumberRegex = /^\d{6}-\d{2}-\d{4}$/;
+      if (!icNumber.match(icNumberRegex)) {
+        alert('Invalid IC number format. Use: 650423-07-5659');
+        return;
+      }
       // Update the nullFormData with the provided data
       const formData = {
         ...nullFormData,
@@ -111,21 +115,22 @@ function Others() {
         Email
 
       };
-      console.log(formData);
+      // console.log(formData);
       const response = await axios.post(`${url}/post/${eventname}`, formData);
   
       // Handle the response from the server if needed
-      console.log(response.data);
+      // console.log(response.data);
       if(response.status==201)
       {
-        alert("Thank you for Registering ! you may leave the site now")
+        alert("Thank you for Registering ! \n Please note down your phoneNumber and password for getting Certificate")
       }
       else{
         
         alert("Some Error Occured")
       }
     } catch (error) {
-      
+      alert(error.response.data.error);
+
     }
   };
 
@@ -137,18 +142,18 @@ function Others() {
       {/* Others Information */}
       <label className="label">
         Full Name:
-        <input className="input-field" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+        <input className="input-field" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required placeholder='Enter your name' />
       </label>
 
       <label className="label">
         IC Number:
-        <input className="input-field" type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)} />
+        <input className="input-field" type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)}  required placeholder='XXXXXX-XX-XXXX'/>
       </label>
 
       {/* State Dropdown */}
       <label className="label">
         School State:
-        <select className="select-field" value={state} onChange={(e) => handlestatechange(e.target.value)}>
+        <select className="select-field" value={state} onChange={(e) => handlestatechange(e.target.value)} required >
           <option value="">Select School State</option>
           {schoolStates.map((state) => (
             <option key={state} value={state}>
@@ -165,6 +170,7 @@ function Others() {
           className="select-field"
           value={district}
           onChange={(e) => handledistrictchange(e.target.value)}
+          required
         >
           <option value="">Select School District</option>
           {state === 'SELANGOR'
@@ -185,12 +191,12 @@ function Others() {
 
       <label className="label">
         Occupation:
-        <input className="input-field" type="text" value={Occupation} onChange={(e) => setOccupation(e.target.value)} />
+        <input className="input-field" type="text" value={Occupation} onChange={(e) => setOccupation(e.target.value)} required  placeholder='Enter your Occupation'/>
       </label>
 
       <label className="label">
         Parent or Visitor:
-        <select className="select-field" value={ParentOrVisitor} onChange={(e) => setParentOrVisitor(e.target.value)}>
+        <select className="select-field" value={ParentOrVisitor} onChange={(e) => setParentOrVisitor(e.target.value)}  required>
           <option value="">Select Option</option>
           <option value="Parent">Parent</option>
           <option value="Visitor">Visitor</option>
@@ -199,15 +205,15 @@ function Others() {
 
       <label className="label">
         Contact Number:
-        <input className="input-field" type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)} />
+        <input className="input-field" type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)} required placeholder='Enter your Contact Number'/>
       </label>
       <label className="label">
           Email:
-          <input className="input-field" type="text" value={Email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="input-field" type="text" value={Email} onChange={(e) => setEmail(e.target.value)}  required placeholder='Enter your Email'/>
         </label>
       <label className="label">
         Password:
-        <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required  placeholder='Enter your password'/>
       </label>
       <button className="button" type="submit">Submit</button>
     </form>

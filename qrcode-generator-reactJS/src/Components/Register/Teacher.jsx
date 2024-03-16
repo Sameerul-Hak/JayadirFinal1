@@ -96,7 +96,11 @@ function Teacher() {
   
       // Create an object with all fields set to null
       const nullFormData = Object.fromEntries(allFields.map((field) => [field, null]));
-  
+      const icNumberRegex = /^\d{6}-\d{2}-\d{4}$/;
+      if (!icNumber.match(icNumberRegex)) {
+        alert('Error', 'Invalid IC number format. Use: 650423-07-5659');
+        return;
+      }
       // Update the nullFormData with the provided data
       const formData = {
         ...nullFormData,
@@ -111,12 +115,12 @@ function Teacher() {
         Email
       };
   
-      console.log(formData);
+      // console.log(formData);
   
       const response = await axios.post(`${url}/post/${eventname}`, formData);
   
       // Handle the response from the server if needed
-      console.log(response.data);
+      // console.log(response.data);
       if(response.status==201)
       {
         alert("Thank you for Registering ! you may leave the site now")
@@ -127,7 +131,9 @@ function Teacher() {
       }
     } catch (err) {
       // Handle errors
-      console.error(err);
+      // console.error(err);
+      alert(err.response.data.error);
+
     }
   };
   
@@ -139,27 +145,27 @@ function Teacher() {
       {/* Teacher Information */}
       <label className="label">
         Full Name:
-        <input className="input-field" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+        <input className="input-field" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)}  required/>
       </label>
 
       <label className="label">
         IC Number:
-        <input className="input-field" type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)} />
+        <input className="input-field" type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)}  required/>
       </label>
 
       <label className="label">
         Name of School:
-        <input className="input-field" type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} />
+        <input className="input-field" type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} required />
       </label>
       <label className="label">
         Contact number:
-        <input className="input-field" type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)} />
+        <input className="input-field" type="text" value={phonenumber} onChange={(e) => setContactNumber(e.target.value)}  required/>
       </label>
 
      
       <label>
           School State:
-          <select value={state} onChange={(e) => handleSchoolStateChange(e.target.value)} className="input-field">
+          <select value={state} onChange={(e) => handleSchoolStateChange(e.target.value)} className="input-field" required>
             <option value="">Select School State</option>
             {schoolStates.map((state) => (
               <option key={state} value={state}>
@@ -176,6 +182,7 @@ function Teacher() {
             value={district}
             onChange={(e) => handleSchoolDistrictChange(e.target.value)}
             className="input-field"
+            required
           >
             <option value="">Select School District</option>
             {state === 'SELANGOR'
@@ -195,11 +202,11 @@ function Teacher() {
         </label>
         <label className="label">
           Email:
-          <input className="input-field" type="text" value={Email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="input-field" type="text" value={Email} onChange={(e) => setEmail(e.target.value)}  required/>
         </label>
       <label className="label">
         Password:
-        <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
       </label>
 
       <button className="button" type="submit">Submit</button>

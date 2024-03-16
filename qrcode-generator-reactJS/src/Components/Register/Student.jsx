@@ -134,6 +134,11 @@ function Student() {
       const nullFormData = Object.fromEntries(allFields.map((field) => [field, null]));
   
       e.preventDefault();
+      const icNumberRegex = /^\d{6}-\d{2}-\d{4}$/;
+      if (!icNumber.match(icNumberRegex)) {
+        alert('Invalid IC number format. Use: 650423-07-5659');
+        return;
+      } 
       // Handle form submission logic here
       const formData = {
         ...nullFormData,
@@ -166,22 +171,21 @@ function Student() {
         Email
         
       };
-      console.log(formData);
+      // console.log(formData);
       // let arrayofname=
       const response = await axios.post(`${url}/post/${eventname}`, formData);
   
       // Handle the response from the server if needed
-      console.log(response.data);
+      // console.log(response.data);
       if(response.status==201)
       {
         alert("Thank you for Registering ! you may leave the site now")
       }
       else{
-        
         alert("Some Error Occured")
       }
     } catch (error) {
-      
+      alert(error.response.data.error);
     }
   };
   const classOptions = [
@@ -225,26 +229,26 @@ function Student() {
         {/* Personal Information */}
         <label className="label">
           Full Name:
-          <input className="input-field" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+          <input className="input-field" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required placeholder='Enter your name'/>
         </label>
   
         <label className="label">
           IC Number:
-          <input className="input-field" type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)} />
+          <input className="input-field" type="text" value={icNumber} onChange={(e) => setIcNumber(e.target.value)} required  placeholder='Enter your ic number'/>
         </label>
   
         <label className="label">
           Date of Birth:
-          <input className="input-field" type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
+          <input className="input-field" type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} required/>
         </label>
   
         <label className="label">
           School Name:
-          <input className="input-field" type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} />
+          <input className="input-field" type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} required placeholder='Enter your school name'/>
         </label>
         <label className="label">
           School State:
-          <select value={selectedSchoolState} onChange={(e) => handleSchoolStateChange(e.target.value)} className="input-field">
+          <select value={selectedSchoolState} onChange={(e) => handleSchoolStateChange(e.target.value)} className="input-field" required >
             <option value="">Select School State</option>
             {schoolStates.map((state) => (
               <option key={state} value={state}>
@@ -261,6 +265,7 @@ function Student() {
             value={selectedSchoolDistrict}
             onChange={(e) => handleSchoolDistrictChange(e.target.value)}
             className="input-field"
+            required
           >
             <option value="">Select School District</option>
             {selectedSchoolState === 'SELANGOR'
@@ -281,13 +286,13 @@ function Student() {
 
         <label className="label">
           Admission Date:
-          <input className="input-field" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          <input className="input-field" type="date" value={date} onChange={(e) => setDate(e.target.value)} required/>
         </label>
   
         {/* Other Information */}
         <label className="label">
           Class:
-        <select value={selectedClass} onChange={handleClassChange} className="input-field">
+        <select value={selectedClass} onChange={handleClassChange} className="input-field" required>
           {classOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -298,7 +303,7 @@ function Student() {
   
         <label className="label">
         Race:
-        <select className="input-field" value={selectedRace} onChange={handleRaceChange}>
+        <select className="input-field" value={selectedRace} onChange={handleRaceChange} required>
           {raceOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -309,21 +314,21 @@ function Student() {
   
         <label className="label">
           Father's Name:
-          <input className="input-field" type="text" value={Fathername} onChange={(e) => setFatherName(e.target.value)} />
+          <input className="input-field" type="text" value={Fathername} onChange={(e) => setFatherName(e.target.value)} required placeholder='Enter your Father name'/>
         </label>
   
         <label className="label">
           Father's Age:
-          <input className="input-field" type="text" value={fatherage} onChange={(e) => setFatherAge(e.target.value)} />
+          <input className="input-field" type="text" value={fatherage} onChange={(e) => setFatherAge(e.target.value)} required placeholder='Enter your Father Age'/>
         </label>
   
         <label className="label">
           Father's Occupation:
-          <input className="input-field" type="text" value={fatheroccupation} onChange={(e) => setFatherOccupation(e.target.value)} />
+          <input className="input-field" type="text" value={fatheroccupation} onChange={(e) => setFatherOccupation(e.target.value)} required placeholder='Enter your Father Occupation'/>
         </label>
         <label className="label">
         Father's Status:
-        <select className="input-field" value={fatherStatus} onChange={handleFatherStatusChange}>
+        <select className="input-field" value={fatherStatus} onChange={handleFatherStatusChange} required>
           {fatherStatusOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -334,17 +339,17 @@ function Student() {
   
         <label className="label">
           Mother's Name:
-          <input className="input-field" type="text" value={mothername} onChange={(e) => setMotherName(e.target.value)} />
+          <input className="input-field" type="text" value={mothername} onChange={(e) => setMotherName(e.target.value)} required placeholder='Enter your Mother name'/>
         </label>
   
         <label className="label">
           Mother's Age:
-          <input className="input-field" type="text" value={motherage} onChange={(e) => setMotherAge(e.target.value)} />
+          <input className="input-field" type="text" value={motherage} onChange={(e) => setMotherAge(e.target.value)} required  placeholder='Enter your Mother Age'/>
         </label>
   
         <label className="label">
           Mother's Occupation:
-          <input className="input-field" type="text" value={motheroccupation} onChange={(e) => setMotherOccupation(e.target.value)} />
+          <input className="input-field" type="text" value={motheroccupation} onChange={(e) => setMotherOccupation(e.target.value)} required   placeholder='Enter your Mother Occupation'/>
         </label>
   
         <label className="label">
@@ -353,6 +358,8 @@ function Student() {
           value={motherStatus}
           onChange={handleMotherStatusChange}
           style={{ backgroundColor: 'white', zIndex: 9999, elevation: 1000 }}
+          required
+          className="input-field"
         >
           <option value="" style={{ color: 'black', fontSize: 15, backgroundColor: '#f3f2f1' }}>
             Select Mother Status Working ?
@@ -371,27 +378,27 @@ function Student() {
   
         <label className="label">
           Home Address:
-          <input className="input-field" type="text" value={homeaddress} onChange={(e) => setHomeAddress(e.target.value)} />
+          <input className="input-field" type="text" value={homeaddress} onChange={(e) => setHomeAddress(e.target.value)} required  placeholder='Enter your Home Address'/>
         </label>
   
        
         <label className="label">
           Phone Number:
-          <input className="input-field" type="text" value={phonenumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+          <input className="input-field" type="text" value={phonenumber} onChange={(e) => setPhoneNumber(e.target.value)} required  placeholder='Enter your Phone Number'/>
         </label>
   
         <label className="label">
           Father's Phone Number:
-          <input className="input-field" type="text" value={phonenumberfather} onChange={(e) => setPhoneNumberFather(e.target.value)} />
+          <input className="input-field" type="text" value={phonenumberfather} onChange={(e) => setPhoneNumberFather(e.target.value)} required placeholder='Enter your Father Phone Number'/>
         </label>
   
         <label className="label">
           Mother's Phone Number:
-          <input className="input-field" type="text" value={phonenumbermother} onChange={(e) => setPhoneNumberMother(e.target.value)} />
+          <input className="input-field" type="text" value={phonenumbermother} onChange={(e) => setPhoneNumberMother(e.target.value)} required  placeholder='Enter your Mother Phone Number'/>
         </label>
         <label className="label">
           Email:
-          <input className="input-field" type="text" value={Email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="input-field" type="text" value={Email} onChange={(e) => setEmail(e.target.value)} required  placeholder='Enter your Email'/>
         </label>
   
        
@@ -402,7 +409,7 @@ function Student() {
     
         <label className="label">
           Password:
-          <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input className="input-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required  placeholder='Enter your Password'/>
         </label>
 
        
@@ -410,7 +417,7 @@ function Student() {
         {/* State Dropdown */}
         <label className="label">
           State:
-          <select value={selectedState} className="input-field" onChange={(e) => handleStateChange(e.target.value)}>
+          <select value={selectedState} className="input-field" onChange={(e) => handleStateChange(e.target.value)} required>
             <option value="">Select State</option>
             {schoolStates.map((state1) => (
               <option key={state1} value={state1}>
@@ -423,7 +430,7 @@ function Student() {
         {/* District Dropdown */}
         <label className="label">
           District:
-          <select value={selectedDistrict} className="input-field" onChange={(e) => handleDistrictChange(e.target.value)}>
+          <select value={selectedDistrict} className="input-field" onChange={(e) => handleDistrictChange(e.target.value)} required>
           <option value="">Select School District</option>
             {selectedState === 'SELANGOR'
               ? selangorDistricts.map((district) => (

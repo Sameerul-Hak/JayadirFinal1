@@ -28,8 +28,8 @@ const Register = () => {
       <h1>{searchParams.get('name')}</h1>
       <h1 className="admin-register-heading">Admin Register</h1>
       <form onSubmit={handleSubmit} className="admin-register-form">
-        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="admin-register-input" />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="admin-register-input" />
+        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="admin-register-input"  required/>
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="admin-register-input" required />
         <button type="submit" className="admin-register-button">Register</button>
       </form>
       <p className="admin-register-login-text">Already have an account? <Link to="/">Login</Link></p>

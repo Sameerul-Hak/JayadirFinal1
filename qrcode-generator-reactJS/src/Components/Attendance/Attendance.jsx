@@ -47,6 +47,8 @@ const Attendance = () => {
                 <th>Phone Number</th>
                 <th>ParentOrVisitor</th>
                 <th>Occupation</th>
+                <th>Email</th>
+                <th>Ic Number</th>
               </tr>
             </thead>
             <tbody>
@@ -60,6 +62,8 @@ const Attendance = () => {
                     <td>{entry.phonenumber}</td>
                     <td>{entry.ParentOrVisitor}</td>
                     <td>{entry.Occupation}</td>
+                    <td>{entry.Email}</td>
+                    <td>{entry.icNumber}</td>
                   </tr>
                 ))}
             </tbody>
@@ -94,6 +98,7 @@ const Attendance = () => {
               <th>phonenumberfather</th>
               <th>phonenumbermother</th>
               <th>icNumber</th>
+              <th>Email</th>
               {/* Add more headers as needed */}
             </tr>
           </thead>
@@ -126,6 +131,8 @@ const Attendance = () => {
 }</td>
                   <td>{entry.icNumber
 }</td>
+                  <td>{entry.Email
+}</td>
                   {/* Add more data cells as needed */}
                 </tr>
               ))}
@@ -145,6 +152,7 @@ const Attendance = () => {
                 <th>District</th>
                 <th>Phone Number</th>
                 <th>IcNumber</th>
+                <th>Email</th>
               </tr>
             </thead>
             <tbody>
@@ -158,6 +166,7 @@ const Attendance = () => {
                     <td>{entry.district}</td>
                     <td>{entry.phonenumber}</td>
                     <td>{entry.icNumber}</td>
+                    <td>{entry.Email}</td>
                   </tr>
                 ))}
             </tbody>
