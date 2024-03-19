@@ -17,9 +17,9 @@ const generateCertificate = (name, ic) => {
 
   // Add recipient name with capitalized first letter
   const capitalizedFirstName = capitalizeFirstLetter(name);
-  doc.setFontSize(36);
+  doc.setFontSize(34);
   doc.setFont('helvetica');
-  doc.text(`${capitalizedFirstName} ${ic}`, 130, 105, { align: 'center' });
+  doc.text(`${capitalizedFirstName} \n ${ic}`, 125, 99, { align: 'center' });
 
   // Save the PDF
   doc.save(`${capitalizedFirstName}.pdf`);

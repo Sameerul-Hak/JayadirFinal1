@@ -43,6 +43,66 @@ function Student() {
     setMotherStatus(e.target.value);
   };
   const schoolStates = ['SELANGOR', 'Kuala Lumpur'];
+  const [location, setLocation] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+
+  // Function to get current location
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+          console.log(position.coords.latitude,position.coords.longitude);
+        },
+        error => {
+          console.error(error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+
+  // Function to calculate distance between two points
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3; // metres
+    const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const d = R * c; // in metres
+    return d;
+  };
+
+
+  const YOUR_OFFICE_LATITUDE =12.9714022;
+  const YOUR_OFFICE_LONGITUDE =80.0434384;
+
+
+  // Function to handle attendance button click
+  const handleAttendanceClick = () => {
+    getCurrentLocation();
+    if (location) {
+      const distance = calculateDistance(location.latitude, location.longitude, YOUR_OFFICE_LATITUDE, YOUR_OFFICE_LONGITUDE);
+      if (distance <= 100) {
+        // Handle attendance recording (e.g., send request to server)
+        alert("Attendance marked successfully!");
+      } else {
+        //setShowAlert(true);
+        alert("You are more than 500 meters away from the office.");
+      }
+    }
+  };
+
   const selangorDistricts = [
     'Sabak Bernam',
     'Hulu Selangor',
@@ -139,7 +199,12 @@ function Student() {
         alert('Invalid IC number format. Use: 650423-07-5659');
         return;
       } 
-      // Handle form submission logic here
+      handleAttendanceClick();
+      getCurrentLocation();
+      if (location) {
+        const distance = calculateDistance(location.latitude, location.longitude, YOUR_OFFICE_LATITUDE, YOUR_OFFICE_LONGITUDE);
+        console.log(distance);
+        if (distance <= 500) {
       const formData = {
         ...nullFormData,
         fullName,
@@ -184,6 +249,11 @@ function Student() {
       else{
         alert("Some Error Occured")
       }
+    }
+    else{
+      alert("You are more than 500 meters away from the office. Cannot submit the form.");
+    }
+  }
     } catch (error) {
       alert(error.response.data.error);
     }

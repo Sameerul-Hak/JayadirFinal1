@@ -42,6 +42,51 @@ function Others() {
     'Bandar Tun Razak',
     'Seputih',
   ];
+  const [location, setLocation] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+
+  // Function to get current location
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+          console.log(position.coords.latitude,position.coords.longitude);
+        },
+        error => {
+          console.error(error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+
+  // Function to calculate distance between two points
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3; // metres
+    const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const d = R * c; // in metres
+    return d;
+  };
+
+  // Replace these placeholders with actual latitude and longitude values of your office location
+  const YOUR_OFFICE_LATITUDE =12.9714022;
+  const YOUR_OFFICE_LONGITUDE =80.0434384
+
+
 
   const handlestatechange = (state) => {
     setstate(state);
@@ -57,9 +102,9 @@ function Others() {
     setDistrict(district);
   };
 
-  const handleFormSubmit = async(e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
+  
     try {
       const allFields = [
         'fullName',
@@ -100,39 +145,45 @@ function Others() {
         alert('Invalid IC number format. Use: 650423-07-5659');
         return;
       }
-      // Update the nullFormData with the provided data
-      const formData = {
-        ...nullFormData,
-        fullName,
-        icNumber,
-        phonenumber,
-        state,
-        district,
-        whoami:"others",
-        Occupation,
-        ParentOrVisitor,
-        password,
-        Email
-
-      };
-      // console.log(formData);
-      const response = await axios.post(`${url}/post/${eventname}`, formData);
   
-      // Handle the response from the server if needed
-      // console.log(response.data);
-      if(response.status==201)
-      {
-        alert("Thank you for Registering ! \n Please note down your phoneNumber and password for getting Certificate")
-      }
-      else{
-        
-        alert("Some Error Occured")
+      // Verify if the user is within the boundary before submitting the form
+      getCurrentLocation();
+      if (location) {
+        const distance = calculateDistance(location.latitude, location.longitude, YOUR_OFFICE_LATITUDE, YOUR_OFFICE_LONGITUDE);
+        console.log(distance);
+        if (distance <= 100) {
+          const formData = {
+            ...nullFormData,
+            fullName,
+            icNumber,
+            phonenumber,
+            state,
+            district,
+            whoami: "others",
+            Occupation,
+            ParentOrVisitor,
+            password,
+            Email
+          };
+          // console.log(formData);
+          const response = await axios.post(`${url}/post/${eventname}`, formData);
+  
+          // Handle the response from the server if needed
+          // console.log(response.data);
+          if (response.status === 201) {
+            alert("Thank you for Registering!\nPlease note down your phoneNumber and password for getting Certificate");
+          } else {
+            alert("Some Error Occurred");
+          }
+        } else {
+          alert("You are more than 500 meters away from the office. Cannot submit the form.");
+        }
       }
     } catch (error) {
       alert(error.response.data.error);
-
     }
   };
+  
 
   return (
     <div className='container_form'>
